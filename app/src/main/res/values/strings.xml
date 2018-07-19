@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Trip Tracker</string>
+
+
+    <!-- Location DB table headers -->
+    <string name="table_header_timestamp" translatable="false">timestamp</string>
+    <string name="table_header_item_key" translatable="false">item_key</string>
+    <string name="table_header_latitude" translatable="false">latitude</string>
+    <string name="table_header_longitude" translatable="false">longitude</string>
+    <string name="table_header_altitude" translatable="false">altitude</string>
+    <string name="table_header_speed" translatable="false">speed</string>
+
+
+
+</resources>
