@@ -14,6 +14,13 @@
     <string name="snackbar_export_csv_failed">Export failed. Please try again.</string>
     <string name="snackbar_goto_downloads">Downloads</string>
     <string name="snackbar_remove_succeed">Route has been removed successfully.</string>
+    <!-- Shared Preferences -->
+    <string name="preference_filename" translatable="false">eu.wonderfulme.triptracker.sharedpreference</string>
+    <string name="preference_record_period" translatable="false">preference_record_period</string>
+    <string name="preference_item_key" translatable="false">preference_item_key</string>
+    <!-- Notifications -->
+    <string name="notification_locationservice_title">Recording Location</string>
+    <string name="notification_locationservice_content">Please remove this notification only from the app itself!</string>
 
 
 

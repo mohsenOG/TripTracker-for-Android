@@ -25,6 +25,10 @@ dependencies {
     def support_sdk_version = "27.1.1"
     implementation "com.android.support:design:$support_sdk_version"
 
+    def play_services_version = "15.0.1"
+    implementation "com.google.android.gms:play-services-location:$play_services_version"
+
+
     implementation 'com.opencsv:opencsv:3.9'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
