@@ -12,9 +12,15 @@ public interface LocationDao {
     @Insert
     void insertSingleRecord(LocationData data);
 
-    @Query("SELECT * FROM LocationData")
-    List<LocationData> getAllDbData();
+//    @Query("SELECT * FROM LocationData")
+//    List<LocationData> getAllDbData();
 
-    @Query("DELETE FROM LocationData")
-    void deleteAllRecords();
+    @Query("SELECT * FROM LocationData WHERE item_key = :itemKey")
+    List<LocationData> getDbData(int itemKey);
+
+//    @Query("DELETE FROM LocationData")
+//    void deleteAllRecords();
+
+    @Query("DELETE FROM LocationData WHERE item_key = :itemKey")
+    void deleteSingleItemKey(int itemKey);
 }

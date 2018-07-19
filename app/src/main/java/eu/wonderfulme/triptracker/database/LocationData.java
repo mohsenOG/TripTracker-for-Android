@@ -11,9 +11,11 @@ import eu.wonderfulme.triptracker.R;
 @Entity
 public class LocationData {
 
+    /**
+     * this function is used to return the headers for CSV file.
+     */
     public static String[] getDbHeaders(Context context) {
         return new String[] {
-                context.getResources().getString(R.string.table_header_item_key),
                 context.getResources().getString(R.string.table_header_timestamp),
                 context.getResources().getString(R.string.table_header_latitude),
                 context.getResources().getString(R.string.table_header_longitude),
