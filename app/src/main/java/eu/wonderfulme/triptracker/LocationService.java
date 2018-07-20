@@ -114,7 +114,8 @@ public class LocationService extends Service implements LocationListener {
 
         private void saveParkingLocation(Location location) {
             if (location.hasAccuracy() && location.getAccuracy() <= PARKING_LOCATION_ACCURACY) {
-                //TODO save location on shared pref selfFinish the service
+                Utils.setParkingLocationToSharedPref(mContext, location);
+                stopSelf();
             }
         }
 
