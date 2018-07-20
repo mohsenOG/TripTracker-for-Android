@@ -8,7 +8,10 @@ import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 public class Utils {
 
@@ -26,25 +29,37 @@ public class Utils {
         return simpleDateFormat.format(resultDate);
     }
 
-    private static SharedPreferences getSharedPreferences(Context context) {
+    private static SharedPreferences getSharedPref(Context context) {
         return context.getSharedPreferences(context.getString(R.string.preference_filename), Context.MODE_PRIVATE);
     }
 
-    static public void setRecordPeriodFromSharedPreferences(Context context, int recordPeriod) {
-        SharedPreferences sharedPreferences = Utils.getSharedPreferences(context);
+    static public void setRecordPeriodFromSharedPref(Context context, int recordPeriod) {
+        SharedPreferences sharedPreferences = Utils.getSharedPref(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(context.getString(R.string.preference_record_period), recordPeriod)
                 .apply();
     }
 
-    static public int getRecordPeriodFromSharedPreferences(Context context) {
-        SharedPreferences sharedPreferences = Utils.getSharedPreferences(context);
+    static public int getRecordPeriodFromSharedPref(Context context) {
+        SharedPreferences sharedPreferences = Utils.getSharedPref(context);
         return sharedPreferences.getInt(context.getString(R.string.preference_record_period), 10);
     }
 
-    static public int getItemKeyFromSharedPreferences(Context context) {
-        SharedPreferences sharedPreferences = Utils.getSharedPreferences(context);
+    static public int getItemKeyFromSharedPref(Context context) {
+        SharedPreferences sharedPreferences = Utils.getSharedPref(context);
         return sharedPreferences.getInt(context.getString(R.string.preference_item_key), -100);
+    }
+
+    /**
+     * Function to get the parking location from shared pref.
+     * @return null if parking is not set otherwise a list of string. index 0 = latitude, index 1 = longitude
+     */
+    static public List<String> getParkingLocationFromSharedPref(Context context) {
+        SharedPreferences sharedPref = Utils.getSharedPref(context);
+        Set<String> location = sharedPref.getStringSet(context.getString(R.string.preference_parking_location), null);
+        if (location == null) return null;
+        return new ArrayList<>(location);
+
     }
 
 

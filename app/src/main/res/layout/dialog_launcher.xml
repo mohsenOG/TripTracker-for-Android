@@ -1,0 +1,65 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="280dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_dialog_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:text="@string/tv_launcher_dialog_title"
+        android:padding="@dimen/dialog_title_padding"
+        android:textSize="@dimen/dialog_title_text_size"
+        android:textStyle="bold"
+        android:focusable="true"
+        android:nextFocusDown="@id/tv_dialog_support"/>
+
+    <TextView
+        android:id="@+id/tv_dialog_support"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:text="@string/tv_launcher_dialog_support_text"
+        android:paddingStart="@dimen/dialog_support_padding"
+        android:paddingEnd="@dimen/dialog_support_padding"
+        android:paddingBottom="@dimen/dialog_support_padding"
+        android:textSize="@dimen/dialog_support_text_size"
+        android:focusable="true"
+        android:nextFocusUp="@id/tv_dialog_title"
+        android:nextFocusDown="@id/btn_launcher_dialog_save_parking" />
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="52dp"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        style="?android:attr/buttonBarStyle">
+
+        <Button
+            android:id="@+id/btn_launcher_dialog_save_parking"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/btn_launcher_dialog_save_parking"
+            style="?android:attr/buttonBarButtonStyle"
+            android:textSize="@dimen/dialog_btn_text_size"
+            android:padding="@dimen/dialog_btn_padding"
+            android:focusable="true"
+            android:nextFocusUp="@id/tv_dialog_support"
+            android:nextFocusRight="@id/btn_launcher_dialog_open_app"/>
+
+        <Button
+            android:id="@+id/btn_launcher_dialog_open_app"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/btn_launcher_dialog_open_app"
+            style="?android:attr/buttonBarButtonStyle"
+            android:textSize="@dimen/dialog_btn_text_size"
+            android:padding="@dimen/dialog_btn_padding"
+            android:focusable="true"
+            android:nextFocusLeft="@id/btn_launcher_dialog_save_parking"/>
+
+    </LinearLayout>
+
+</LinearLayout>

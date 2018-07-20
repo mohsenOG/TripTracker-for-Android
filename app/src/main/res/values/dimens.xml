@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="dialog_title_padding">24dp</dimen>
+    <dimen name="dialog_title_text_size">20sp</dimen>
+    <dimen name="dialog_support_padding">24dp</dimen>
+    <dimen name="dialog_support_text_size">16sp</dimen>
+    <dimen name="dialog_btn_padding">8dp</dimen>
+    <dimen name="dialog_btn_text_size">14sp</dimen>
+
+
+</resources>

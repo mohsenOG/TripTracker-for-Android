@@ -18,10 +18,16 @@
     <string name="preference_filename" translatable="false">eu.wonderfulme.triptracker.sharedpreference</string>
     <string name="preference_record_period" translatable="false">preference_record_period</string>
     <string name="preference_item_key" translatable="false">preference_item_key</string>
+    <string name="preference_parking_location" translatable="false">preference_parking_location</string>
     <!-- Notifications -->
     <string name="notification_locationservice_title">Recording Location</string>
     <string name="notification_locationservice_content">Please remove this notification only from the app itself!</string>
-
+    <!-- Launcher dialog strings -->
+    <string name="tv_launcher_dialog_title">What do you want to do?</string>
+    <string name="tv_launcher_dialog_support_text">You can choose between saving your parking location of opening the Trip Tracker.</string>
+    <string name="btn_launcher_dialog_save_parking">Save Parking</string>
+    <string name="btn_launcher_dialog_restore_parking">Show Parking</string>
+    <string name="btn_launcher_dialog_open_app">Open App</string>
 
 
 </resources>
