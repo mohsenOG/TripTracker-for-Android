@@ -24,12 +24,23 @@ import eu.wonderfulme.triptracker.tasks.InsertLocationAsyncTask;
 
 public class LocationService extends Service implements LocationListener {
 
+    public enum LocationRequestType {
+       LOCATION_TYPE_SINGLE,
+       LOCATION_TYPE_TRACK
+    }
+
     private static final String NOTIFICATION_CHANNEL_NAME = "NOTIFICATION_CHANNEL_NAME";
     private static final String NOTIFICATION_CHANNEL_ID = "100";
     private static final int NOTIFICATION_ID = 110;
+    private static final int PARKING_LOCATION_ACCURACY = 6;
     private LocationRequest mLocationRequest;
     private MyLocationCallback mLocationCallback;
     private long mRecordPeriodInSeconds;
+    private LocationRequestType mRequestType;
+
+    public LocationService(LocationRequestType type) {
+        mRequestType = type;
+    }
 
     @Override
     public void onCreate() {
@@ -42,19 +53,22 @@ public class LocationService extends Service implements LocationListener {
     @SuppressLint("MissingPermission")
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        mRecordPeriodInSeconds = Utils.getRecordPeriodFromSharedPreferences(this);
+        mRecordPeriodInSeconds = Utils.getRecordPeriodFromSharedPref(this);
         mLocationRequest.setInterval(mRecordPeriodInSeconds * 1000);
         if (Utils.isLocationPermissionGranted(this)) {
             LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(mLocationRequest, mLocationCallback, null);
         }
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
-                .setContentTitle(getString(R.string.notification_locationservice_title))
-                .setContentText(getString(R.string.notification_locationservice_content))
-                .setSmallIcon(R.drawable.ic_notification)
-                .setColor(getResources().getColor(R.color.colorAccent));
-        createNotificationChannel();
-        startForeground(NOTIFICATION_ID, builder.build());
+        // Check how the service should implement.
+        if (mRequestType == LocationRequestType.LOCATION_TYPE_TRACK) {
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
+                    .setContentTitle(getString(R.string.notification_locationservice_title))
+                    .setContentText(getString(R.string.notification_locationservice_content))
+                    .setSmallIcon(R.drawable.ic_notification)
+                    .setColor(getResources().getColor(R.color.colorAccent));
+            createNotificationChannel();
+            startForeground(NOTIFICATION_ID, builder.build());
+        }
 
         return START_STICKY;
     }
@@ -72,7 +86,7 @@ public class LocationService extends Service implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        mLocationCallback.saveLocationOnDatabase(location);
+        mLocationCallback.saveLocation(location);
     }
 
 
@@ -87,10 +101,24 @@ public class LocationService extends Service implements LocationListener {
         public void onLocationResult(LocationResult locationResult) {
             if (locationResult == null) return;
             Location location = locationResult.getLastLocation();
-            saveLocationOnDatabase(location);
+            saveLocation(location);
         }
 
-        void saveLocationOnDatabase(Location location) {
+        void saveLocation(Location location) {
+            if (mRequestType == LocationRequestType.LOCATION_TYPE_TRACK) {
+                saveLocationOnDatabase(location);
+            } else {
+                saveParkingLocation(location);
+            }
+        }
+
+        private void saveParkingLocation(Location location) {
+            if (location.hasAccuracy() && location.getAccuracy() <= PARKING_LOCATION_ACCURACY) {
+                //TODO save location on shared pref selfFinish the service
+            }
+        }
+
+        private void saveLocationOnDatabase(Location location) {
             String timestamp = Utils.getFormattedTime(System.currentTimeMillis());
             double latitude = location.getLatitude();
             double longitude = location.getLongitude();
@@ -102,7 +130,7 @@ public class LocationService extends Service implements LocationListener {
             if (location.hasSpeed()) {
                 speed = location.getSpeed();
             }
-            int itemKey = Utils.getItemKeyFromSharedPreferences(mContext);
+            int itemKey = Utils.getItemKeyFromSharedPref(mContext);
             if (itemKey == -100)
                 return;
             LocationData dbData = new LocationData(timestamp, itemKey, latitude, longitude, altitude, speed);
