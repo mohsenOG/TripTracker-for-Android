@@ -80,10 +80,13 @@ public class LauncherDialog extends Dialog implements View.OnClickListener {
     }
 
     private void saveParkingLocation() {
-
+        //TODO Check GPS and when not ON send user to setting.
+        // If succeed run the LocationService with REQUEST_TYPE_SINGLE.
+        // Write a class to do it so it can be used also in main activity buttons.
     }
 
     private void openParkingLocation() {
-
+        //TODO Get location from shared pref and send as intent to google maps or any navi app.
+        // Write a class to do it so it can be used also in main activity buttons.
     }
 }

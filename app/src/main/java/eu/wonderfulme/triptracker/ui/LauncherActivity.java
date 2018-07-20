@@ -13,6 +13,10 @@ public class LauncherActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launcher);
 
+        //TODO add googleApiClient here and try to connect to it.
+        // if failed show a dialog that google services is a must.
+        //Otherwise call launcher dialog.
+
         LauncherDialog dialog = new LauncherDialog(this);
         dialog.show();
 
