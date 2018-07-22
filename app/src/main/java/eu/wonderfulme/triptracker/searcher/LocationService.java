@@ -1,4 +1,4 @@
-package eu.wonderfulme.triptracker;
+package eu.wonderfulme.triptracker.searcher;
 
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
@@ -18,16 +18,14 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
 
-
+import eu.wonderfulme.triptracker.R;
+import eu.wonderfulme.triptracker.Utils;
 import eu.wonderfulme.triptracker.database.LocationData;
 import eu.wonderfulme.triptracker.tasks.InsertLocationAsyncTask;
 
-public class LocationService extends Service implements LocationListener {
+import static eu.wonderfulme.triptracker.searcher.SearchLocation.LocationRequestType.LOCATION_TYPE_TRACK;
 
-    public enum LocationRequestType {
-       LOCATION_TYPE_SINGLE,
-       LOCATION_TYPE_TRACK
-    }
+class LocationService extends Service implements LocationListener {
 
     private static final String NOTIFICATION_CHANNEL_NAME = "NOTIFICATION_CHANNEL_NAME";
     private static final String NOTIFICATION_CHANNEL_ID = "100";
@@ -36,10 +34,17 @@ public class LocationService extends Service implements LocationListener {
     private LocationRequest mLocationRequest;
     private MyLocationCallback mLocationCallback;
     private long mRecordPeriodInSeconds;
-    private LocationRequestType mRequestType;
+    private SearchLocation.LocationRequestType mRequestType;
+    private LocationServiceCallback mLocationServiceCallback;
 
-    public LocationService(LocationRequestType type) {
+    LocationService(SearchLocation.LocationRequestType type, LocationServiceCallback callback) {
         mRequestType = type;
+        mLocationServiceCallback = callback;
+
+    }
+
+    interface LocationServiceCallback {
+        void onParkingLocationSaved();
     }
 
     @Override
@@ -50,17 +55,15 @@ public class LocationService extends Service implements LocationListener {
         mLocationCallback = new MyLocationCallback(this);
     }
 
-    @SuppressLint("MissingPermission")
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        mRecordPeriodInSeconds = Utils.getRecordPeriodFromSharedPref(this);
-        mLocationRequest.setInterval(mRecordPeriodInSeconds * 1000);
-        if (Utils.isLocationPermissionGranted(this)) {
-            LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(mLocationRequest, mLocationCallback, null);
-        }
 
         // Check how the service should implement.
-        if (mRequestType == LocationRequestType.LOCATION_TYPE_TRACK) {
+        if (mRequestType == LOCATION_TYPE_TRACK) {
+            mRecordPeriodInSeconds = Utils.getRecordPeriodFromSharedPref(this);
+            mLocationRequest.setInterval(mRecordPeriodInSeconds * 1000);
+            StartRequestLocation();
+
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
                     .setContentTitle(getString(R.string.notification_locationservice_title))
                     .setContentText(getString(R.string.notification_locationservice_content))
@@ -68,6 +71,10 @@ public class LocationService extends Service implements LocationListener {
                     .setColor(getResources().getColor(R.color.colorAccent));
             createNotificationChannel();
             startForeground(NOTIFICATION_ID, builder.build());
+        } else {
+            mLocationRequest.setInterval(0); // No delay.
+            mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+            StartRequestLocation();
         }
 
         return START_STICKY;
@@ -105,7 +112,7 @@ public class LocationService extends Service implements LocationListener {
         }
 
         void saveLocation(Location location) {
-            if (mRequestType == LocationRequestType.LOCATION_TYPE_TRACK) {
+            if (mRequestType == LOCATION_TYPE_TRACK) {
                 saveLocationOnDatabase(location);
             } else {
                 saveParkingLocation(location);
@@ -116,6 +123,9 @@ public class LocationService extends Service implements LocationListener {
             if (location.hasAccuracy() && location.getAccuracy() <= PARKING_LOCATION_ACCURACY) {
                 Utils.setParkingLocationToSharedPref(mContext, location);
                 stopSelf();
+                if (mLocationServiceCallback != null) {
+                    mLocationServiceCallback.onParkingLocationSaved();
+                }
             }
         }
 
@@ -147,6 +157,13 @@ public class LocationService extends Service implements LocationListener {
             if (notificationManager != null) {
                 notificationManager.createNotificationChannel(channel);
             }
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private void StartRequestLocation() {
+        if (Utils.isLocationPermissionGranted(this)) {
+            LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(mLocationRequest, mLocationCallback, null);
         }
     }
 

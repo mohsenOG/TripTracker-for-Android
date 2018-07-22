@@ -17,7 +17,7 @@
 
         <!-- Location Service -->
         <service
-            android:name=".LocationService"
+            android:name=".searcher.LocationService"
             android:enabled="true"
             android:exported="false" />
         <!-- Launcher Activity -->

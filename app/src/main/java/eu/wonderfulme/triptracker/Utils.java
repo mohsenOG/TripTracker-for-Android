@@ -53,15 +53,20 @@ public class Utils {
     }
 
     static public void setParkingLocationToSharedPref(Context context, Location location) {
-        String latitude = String.valueOf(location.getLatitude());
-        String longitude = String.valueOf(location.getLongitude());
-        Set<String> locationSet = new HashSet<>();
-        locationSet.add(latitude);
-        locationSet.add(longitude);
         SharedPreferences sharedPreferences = Utils.getSharedPref(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putStringSet(context.getString(R.string.preference_parking_location), locationSet)
-                .apply();
+        if (location == null) {
+            editor.putStringSet(context.getString(R.string.preference_parking_location), null);
+        }
+        else {
+            String latitude = String.valueOf(location.getLatitude());
+            String longitude = String.valueOf(location.getLongitude());
+            Set<String> locationSet = new HashSet<>();
+            locationSet.add(latitude);
+            locationSet.add(longitude);
+            editor.putStringSet(context.getString(R.string.preference_parking_location), locationSet);
+        }
+        editor.apply();
     }
 
     /**

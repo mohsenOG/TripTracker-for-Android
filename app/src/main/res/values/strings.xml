@@ -28,6 +28,15 @@
     <string name="btn_launcher_dialog_save_parking">Save Parking</string>
     <string name="btn_launcher_dialog_restore_parking">Show Parking</string>
     <string name="btn_launcher_dialog_open_app">Open App</string>
+    <!-- Toasts -->
+    <string name="toast_parking_saved">Location saved successfully.</string>
+    <string name="toast_location_permission_denied">Our app main functionality needs location. Please try again and accept the location access.</string>
+    <string name="toast_gps_denied">Our app main functionality needs location. Please turn your gps on and try again.</string>
+    <string name="toast_google_client_no_connection">Our app main functionality needs Google Services. Please login to you google account.</string>
+
+    <string name="gps_is_not_on">Your GPS seems to be disabled, do you want to enable it?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
 
 </resources>
