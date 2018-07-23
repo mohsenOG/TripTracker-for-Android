@@ -2,39 +2,50 @@ package eu.wonderfulme.triptracker.ui;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.util.CollectionUtils;
 
 import java.util.List;
 
+import eu.wonderfulme.triptracker.App;
 import eu.wonderfulme.triptracker.R;
-import eu.wonderfulme.triptracker.Utils;
+import eu.wonderfulme.triptracker.utility.Utils;
 import eu.wonderfulme.triptracker.searcher.SearchLocation;
 
-import static eu.wonderfulme.triptracker.searcher.SearchLocation.LocationRequestType.LOCATION_TYPE_SINGLE;
+import static eu.wonderfulme.triptracker.searcher.SearchLocation.LOCATION_TYPE_SINGLE;
 
-public class LauncherDialog extends Dialog implements View.OnClickListener, SearchLocation.SearchLocationCallback, ActivityCompat.OnRequestPermissionsResultCallback{
+public class LauncherDialog extends Dialog implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback{
 
     private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 100;
+    public static final String ACTION_PARKING_LOCATION_SAVED = "ACTION_PARKING_LOCATION_SAVED";
     private Context mContext;
     private Button mSaveParkingButton;
     private Button mOpenAppButton;
+    private ProgressBar mProgressBar;
+    private TextView mDetailTextView;
     private AppCompatActivity mParentActivity;
+
+    private BroadcastReceiver mLocationServiceBroadcastReceiver;
 
 
     public LauncherDialog(@NonNull Context context) {
@@ -50,6 +61,18 @@ public class LauncherDialog extends Dialog implements View.OnClickListener, Sear
         setContentView(R.layout.dialog_launcher);
         this.setCanceledOnTouchOutside(false);
 
+        // Init receiver
+        mLocationServiceBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Toast.makeText(mContext, mContext.getString(R.string.toast_parking_saved), Toast.LENGTH_SHORT).show();
+                dismiss();
+                mParentActivity.finish();
+            }
+        };
+        IntentFilter filter = new IntentFilter(ACTION_PARKING_LOCATION_SAVED);
+        LocalBroadcastManager.getInstance(mContext).registerReceiver(mLocationServiceBroadcastReceiver, filter);
+
         mSaveParkingButton = findViewById(R.id.btn_launcher_dialog_save_parking);
         mSaveParkingButton.setOnClickListener(this);
         // Check the location if it is valid show the restore button.
@@ -60,12 +83,22 @@ public class LauncherDialog extends Dialog implements View.OnClickListener, Sear
 
         mOpenAppButton = findViewById(R.id.btn_launcher_dialog_open_app);
         mOpenAppButton.setOnClickListener(this);
+
+        mProgressBar = findViewById(R.id.progressBar_dialog);
+        mDetailTextView = findViewById(R.id.tv_dialog_support);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mLocationServiceBroadcastReceiver);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_launcher_dialog_save_parking: {
+                showHideProgressBar(true);
                 if (mSaveParkingButton.getText().toString().equals(mContext.getString(R.string.btn_launcher_dialog_save_parking))) {
                     saveParkingLocation();
                 } else {
@@ -104,11 +137,12 @@ public class LauncherDialog extends Dialog implements View.OnClickListener, Sear
     }
 
     private void checkGPSAndStartService() {
-        SearchLocation searchLocation = new SearchLocation(mContext, LOCATION_TYPE_SINGLE, this);
+        SearchLocation searchLocation = new SearchLocation(mContext, LOCATION_TYPE_SINGLE);
         boolean isGpsOn = searchLocation.isGpsOn();
-        if (isGpsOn){
+        if (App.getGoogleApiHelper().isConnected() && isGpsOn){
             searchLocation.startService();
         } else {
+            showHideProgressBar(false);
             buildAlertMessageNoGps();
         }
     }
@@ -140,7 +174,7 @@ public class LauncherDialog extends Dialog implements View.OnClickListener, Sear
         if (parkingLocationList != null) {
             String latitude = parkingLocationList.get(0);
             String longitude = parkingLocationList.get(1);
-            String uri = "geo:" + latitude + "," + longitude;
+            String uri = "https://www.google.com/maps/dir/?api=1&origin=Your+location&destination=" + latitude + "," + longitude;
             Uri mapUri = Uri.parse(uri);
             Intent mapIntent = new Intent(Intent.ACTION_VIEW, mapUri);
             mapIntent.setPackage("com.google.android.apps.maps");
@@ -155,13 +189,6 @@ public class LauncherDialog extends Dialog implements View.OnClickListener, Sear
             dismiss();
             mParentActivity.finish();
         }
-    }
-
-    @Override
-    public void onParkingLocationSaved() {
-        Toast.makeText(mContext, mContext.getString(R.string.toast_parking_saved), Toast.LENGTH_SHORT).show();
-        dismiss();
-        mParentActivity.finish();
     }
 
     @Override
@@ -181,5 +208,11 @@ public class LauncherDialog extends Dialog implements View.OnClickListener, Sear
             default:
                 break;
         }
+    }
+
+    private void showHideProgressBar(boolean show) {
+        mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+        mDetailTextView.setVisibility(show ? View.GONE : View.VISIBLE);
+
     }
 }

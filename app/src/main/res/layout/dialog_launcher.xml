@@ -30,6 +30,13 @@
         android:nextFocusDown="@id/btn_launcher_dialog_save_parking" />
 
 
+    <ProgressBar
+        android:id="@+id/progressBar_dialog"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="52dp"

@@ -10,6 +10,7 @@ import android.location.Location;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationListener;
@@ -17,35 +18,25 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
-
 import eu.wonderfulme.triptracker.R;
-import eu.wonderfulme.triptracker.Utils;
+import eu.wonderfulme.triptracker.utility.Utils;
 import eu.wonderfulme.triptracker.database.LocationData;
 import eu.wonderfulme.triptracker.tasks.InsertLocationAsyncTask;
 
-import static eu.wonderfulme.triptracker.searcher.SearchLocation.LocationRequestType.LOCATION_TYPE_TRACK;
+import static eu.wonderfulme.triptracker.searcher.SearchLocation.LOCATION_TYPE_TRACK;
+import static eu.wonderfulme.triptracker.ui.LauncherDialog.ACTION_PARKING_LOCATION_SAVED;
 
-class LocationService extends Service implements LocationListener {
+public class LocationService extends Service implements LocationListener {
 
+    public static final String INTENT_EXTRA_LOCATION_REQUEST_TYPE = "INTENT_EXTRA_LOCATION_REQUEST_TYPE";
     private static final String NOTIFICATION_CHANNEL_NAME = "NOTIFICATION_CHANNEL_NAME";
     private static final String NOTIFICATION_CHANNEL_ID = "100";
     private static final int NOTIFICATION_ID = 110;
-    private static final int PARKING_LOCATION_ACCURACY = 6;
+    private static final int PARKING_LOCATION_ACCURACY = 15;
     private LocationRequest mLocationRequest;
     private MyLocationCallback mLocationCallback;
     private long mRecordPeriodInSeconds;
-    private SearchLocation.LocationRequestType mRequestType;
-    private LocationServiceCallback mLocationServiceCallback;
-
-    LocationService(SearchLocation.LocationRequestType type, LocationServiceCallback callback) {
-        mRequestType = type;
-        mLocationServiceCallback = callback;
-
-    }
-
-    interface LocationServiceCallback {
-        void onParkingLocationSaved();
-    }
+    private int mLocationRequestType;
 
     @Override
     public void onCreate() {
@@ -57,9 +48,11 @@ class LocationService extends Service implements LocationListener {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
+        if (intent != null) {
+            mLocationRequestType = intent.getIntExtra(INTENT_EXTRA_LOCATION_REQUEST_TYPE, -1);
+        }
         // Check how the service should implement.
-        if (mRequestType == LOCATION_TYPE_TRACK) {
+        if (mLocationRequestType == LOCATION_TYPE_TRACK) {
             mRecordPeriodInSeconds = Utils.getRecordPeriodFromSharedPref(this);
             mLocationRequest.setInterval(mRecordPeriodInSeconds * 1000);
             StartRequestLocation();
@@ -112,7 +105,7 @@ class LocationService extends Service implements LocationListener {
         }
 
         void saveLocation(Location location) {
-            if (mRequestType == LOCATION_TYPE_TRACK) {
+            if (mLocationRequestType == LOCATION_TYPE_TRACK) {
                 saveLocationOnDatabase(location);
             } else {
                 saveParkingLocation(location);
@@ -120,13 +113,11 @@ class LocationService extends Service implements LocationListener {
         }
 
         private void saveParkingLocation(Location location) {
-            if (location.hasAccuracy() && location.getAccuracy() <= PARKING_LOCATION_ACCURACY) {
+            //if (location.hasAccuracy() && location.getAccuracy() <= PARKING_LOCATION_ACCURACY) {
                 Utils.setParkingLocationToSharedPref(mContext, location);
+                broadcastParkingSaved();
                 stopSelf();
-                if (mLocationServiceCallback != null) {
-                    mLocationServiceCallback.onParkingLocationSaved();
-                }
-            }
+                //}
         }
 
         private void saveLocationOnDatabase(Location location) {
@@ -147,6 +138,13 @@ class LocationService extends Service implements LocationListener {
             LocationData dbData = new LocationData(timestamp, itemKey, latitude, longitude, altitude, speed);
             new InsertLocationAsyncTask(mContext).execute(dbData);
         }
+    }
+
+    private void broadcastParkingSaved() {
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(this);
+        Intent intent = new Intent();
+        intent.setAction(ACTION_PARKING_LOCATION_SAVED);
+        localBroadcastManager.sendBroadcast(intent);
     }
 
     private void createNotificationChannel() {

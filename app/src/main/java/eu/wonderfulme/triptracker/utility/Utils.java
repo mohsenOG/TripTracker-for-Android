@@ -1,4 +1,4 @@
-package eu.wonderfulme.triptracker;
+package eu.wonderfulme.triptracker.utility;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -14,6 +14,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import eu.wonderfulme.triptracker.R;
 
 public class Utils {
 

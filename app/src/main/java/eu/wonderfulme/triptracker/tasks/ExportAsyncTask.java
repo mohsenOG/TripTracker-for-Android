@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.List;
 
 import eu.wonderfulme.triptracker.R;
-import eu.wonderfulme.triptracker.Utils;
+import eu.wonderfulme.triptracker.utility.Utils;
 import eu.wonderfulme.triptracker.database.LocationData;
 import eu.wonderfulme.triptracker.database.LocationDbSingleton;
 

@@ -4,36 +4,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.LocationManager;
 
-import static eu.wonderfulme.triptracker.searcher.SearchLocation.LocationRequestType.LOCATION_TYPE_SINGLE;
 
+import static eu.wonderfulme.triptracker.searcher.LocationService.INTENT_EXTRA_LOCATION_REQUEST_TYPE;
 
-public class SearchLocation implements LocationService.LocationServiceCallback {
+public class SearchLocation {
 
-    public enum LocationRequestType {
-        LOCATION_TYPE_SINGLE,
-        LOCATION_TYPE_TRACK;
-    }
+    public static final int LOCATION_TYPE_SINGLE = 0;
+    public static final int LOCATION_TYPE_TRACK = 1;
 
-    public interface SearchLocationCallback {
-        void onParkingLocationSaved();
-    }
-
-    private LocationService mLocationService;
     private Context mContext;
-    private LocationRequestType mRequestType;
-    private SearchLocationCallback mSearchLocationCallback;
+    private Intent mServiceIntent;
 
-    public SearchLocation(Context context, LocationRequestType requestType, SearchLocationCallback searchLocationCallback) {
+    public SearchLocation(Context context, int requestType) {
         this.mContext = context;
-        this.mRequestType = requestType;
-        this.mSearchLocationCallback = searchLocationCallback;
-    }
-
-    @Override
-    public void onParkingLocationSaved() {
-        if (mSearchLocationCallback != null) {
-            mSearchLocationCallback.onParkingLocationSaved();
-        }
+        this.mServiceIntent = new Intent(mContext, LocationService.class);
+        mServiceIntent.putExtra(INTENT_EXTRA_LOCATION_REQUEST_TYPE, requestType);
     }
 
     public boolean isGpsOn() {
@@ -46,16 +31,10 @@ public class SearchLocation implements LocationService.LocationServiceCallback {
     }
 
     public void startService() {
-        if (mLocationService == null) {
-            mLocationService = new LocationService(mRequestType, this);
-            Intent intent = new Intent(mContext, LocationService.class);
-            mLocationService.startService(intent);
-        }
+            mContext.startService(mServiceIntent);
     }
 
     public void stopLocationService() {
-        if (mLocationService != null && mRequestType != LOCATION_TYPE_SINGLE) {
-            mLocationService.stopService(new Intent(mContext, LocationService.class));
-        }
+            mContext.stopService(mServiceIntent);
     }
 }
