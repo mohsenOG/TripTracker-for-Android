@@ -48,7 +48,7 @@
             android:id="@+id/btn_launcher_dialog_save_parking"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="@string/btn_launcher_dialog_save_parking"
+            android:text="@string/btn_save_parking"
             style="?android:attr/buttonBarButtonStyle"
             android:textSize="@dimen/dialog_btn_text_size"
             android:padding="@dimen/dialog_btn_padding"

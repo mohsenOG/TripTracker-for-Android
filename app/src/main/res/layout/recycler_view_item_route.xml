@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/rv_item_route_height"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/rv_item_route_padding"
+    android:paddingEnd="@dimen/rv_item_route_padding">
+
+    <TextView
+        android:id="@+id/tv_route_name"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/rv_item_route_text_view_height"
+        android:gravity="center_vertical"
+        android:textSize="@dimen/rv_item_route_text_size"
+        tools:text="@string/tmp_route_name"
+        android:focusable="true" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/divider_height"
+        android:background="@color/divider"
+        android:focusable="false"/>
+
+</LinearLayout>

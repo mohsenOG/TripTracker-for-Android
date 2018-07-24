@@ -9,4 +9,12 @@
     <dimen name="dialog_btn_text_size">14sp</dimen>
 
 
+    <dimen name="rv_item_route_padding">16dp</dimen>
+    <dimen name="rv_item_route_height">48dp</dimen>
+    <dimen name="rv_item_route_text_view_height">47dp</dimen>
+    <dimen name="rv_item_route_text_size">16sp</dimen>
+    <dimen name="divider_height">1dp</dimen>
+
+    <dimen name="btn_main_margin">16dp</dimen>
+
 </resources>

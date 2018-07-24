@@ -78,7 +78,7 @@ public class LauncherDialog extends Dialog implements View.OnClickListener, Acti
         // Check the location if it is valid show the restore button.
         List<String> parkingLocation = Utils.getParkingLocationFromSharedPref(mContext);
         if (!CollectionUtils.isEmpty(parkingLocation)) {
-            mSaveParkingButton.setText(R.string.btn_launcher_dialog_restore_parking);
+            mSaveParkingButton.setText(R.string.btn_restore_parking);
         }
 
         mOpenAppButton = findViewById(R.id.btn_launcher_dialog_open_app);
@@ -99,7 +99,7 @@ public class LauncherDialog extends Dialog implements View.OnClickListener, Acti
         switch (v.getId()) {
             case R.id.btn_launcher_dialog_save_parking: {
                 showHideProgressBar(true);
-                if (mSaveParkingButton.getText().toString().equals(mContext.getString(R.string.btn_launcher_dialog_save_parking))) {
+                if (mSaveParkingButton.getText().toString().equals(mContext.getString(R.string.btn_save_parking))) {
                     saveParkingLocation();
                 } else {
                     openParkingLocation();

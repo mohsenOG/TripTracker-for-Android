@@ -25,9 +25,7 @@
     <!-- Launcher dialog strings -->
     <string name="tv_launcher_dialog_title">What do you want to do?</string>
     <string name="tv_launcher_dialog_support_text">You can choose between saving your parking location of opening the Trip Tracker.</string>
-    <string name="btn_launcher_dialog_save_parking">Save Parking</string>
-    <string name="btn_launcher_dialog_restore_parking">Show Parking</string>
-    <string name="btn_launcher_dialog_open_app">Open App</string>
+    <string name="btn_launcher_dialog_open_app">OPEN APP</string>
     <!-- Toasts -->
     <string name="toast_parking_saved">Location saved successfully.</string>
     <string name="toast_location_permission_denied">Our app main functionality needs location. Please try again and accept the location access.</string>
@@ -38,5 +36,18 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
 
+    <string name="btn_save_parking">SAVE PARKING</string>
+    <string name="btn_restore_parking">SHOW PARKING</string>
+    <string name="btn_remove_parking">REMOVE PARKING</string>
+
+
+    <!-- MainActivity Strings. -->
+    <string name="tmp_route_name" translatable="false">route name temp</string>
+    <string name="btn_main_record">RECORD</string>
+    <string name="btn_main_stop_record">STOP RECORDING</string>
+
+    <!-- Actions -->
+    <string name="action_setting">Settings</string>
+    <string name="action_about">About</string>
 
 </resources>
