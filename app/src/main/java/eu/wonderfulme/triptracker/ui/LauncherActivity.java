@@ -18,6 +18,7 @@ public class LauncherActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launcher);
+        setTitle("");
 
         //Check api connection.
         App.getGoogleApiHelper().setConnectionListener(new GoogleApiHelper.ConnectionListener() {

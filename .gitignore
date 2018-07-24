@@ -24,3 +24,5 @@ proguard/
 .idea/
 *.jks
 
+fabric.properties
+
