@@ -31,6 +31,7 @@ import eu.wonderfulme.triptracker.App;
 import eu.wonderfulme.triptracker.R;
 import eu.wonderfulme.triptracker.utility.Utils;
 import eu.wonderfulme.triptracker.searcher.SearchLocation;
+import eu.wonderfulme.triptracker.utility.UtilsSharedPref;
 
 import static eu.wonderfulme.triptracker.searcher.SearchLocation.LOCATION_TYPE_SINGLE;
 
@@ -76,7 +77,7 @@ public class LauncherDialog extends Dialog implements View.OnClickListener, Acti
         mSaveParkingButton = findViewById(R.id.btn_launcher_dialog_save_parking);
         mSaveParkingButton.setOnClickListener(this);
         // Check the location if it is valid show the restore button.
-        List<String> parkingLocation = Utils.getParkingLocationFromSharedPref(mContext);
+        List<String> parkingLocation = UtilsSharedPref.getParkingLocationFromSharedPref(mContext);
         if (!CollectionUtils.isEmpty(parkingLocation)) {
             mSaveParkingButton.setText(R.string.btn_restore_parking);
         }
@@ -170,7 +171,7 @@ public class LauncherDialog extends Dialog implements View.OnClickListener, Acti
     }
 
     private void openParkingLocation() {
-        List<String> parkingLocationList = Utils.getParkingLocationFromSharedPref(mContext);
+        List<String> parkingLocationList = UtilsSharedPref.getParkingLocationFromSharedPref(mContext);
         if (parkingLocationList != null) {
             String latitude = parkingLocationList.get(0);
             String longitude = parkingLocationList.get(1);
@@ -185,7 +186,7 @@ public class LauncherDialog extends Dialog implements View.OnClickListener, Acti
                 mContext.startActivity(mapIntent);
             }
             // Remove location from shared pref.
-            Utils.setParkingLocationToSharedPref(mContext, null);
+            UtilsSharedPref.setParkingLocationToSharedPref(mContext, null);
             dismiss();
             mParentActivity.finish();
         }

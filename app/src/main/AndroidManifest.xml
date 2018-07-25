@@ -18,11 +18,6 @@
         android:name=".App"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
 
-        <!-- Fabric crash analyzer -->
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="@string/FABRIC_CRASHLYTICS_API_KEY" />
-
         <!-- Location Service -->
         <service
             android:name=".searcher.LocationService"

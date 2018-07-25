@@ -22,6 +22,7 @@ import eu.wonderfulme.triptracker.R;
 import eu.wonderfulme.triptracker.utility.Utils;
 import eu.wonderfulme.triptracker.database.LocationData;
 import eu.wonderfulme.triptracker.tasks.InsertLocationAsyncTask;
+import eu.wonderfulme.triptracker.utility.UtilsSharedPref;
 
 import static eu.wonderfulme.triptracker.searcher.SearchLocation.LOCATION_TYPE_TRACK;
 import static eu.wonderfulme.triptracker.ui.LauncherDialog.ACTION_PARKING_LOCATION_SAVED;
@@ -53,7 +54,7 @@ public class LocationService extends Service implements LocationListener {
         }
         // Check how the service should implement.
         if (mLocationRequestType == LOCATION_TYPE_TRACK) {
-            mRecordPeriodInSeconds = Utils.getRecordPeriodFromSharedPref(this);
+            mRecordPeriodInSeconds = UtilsSharedPref.getRecordPeriodFromSharedPref(this);
             mLocationRequest.setInterval(mRecordPeriodInSeconds * 1000);
             StartRequestLocation();
 
@@ -113,11 +114,11 @@ public class LocationService extends Service implements LocationListener {
         }
 
         private void saveParkingLocation(Location location) {
-            //if (location.hasAccuracy() && location.getAccuracy() <= PARKING_LOCATION_ACCURACY) {
-                Utils.setParkingLocationToSharedPref(mContext, location);
+            if (location.hasAccuracy() && location.getAccuracy() <= PARKING_LOCATION_ACCURACY) {
+                UtilsSharedPref.setParkingLocationToSharedPref(mContext, location);
                 broadcastParkingSaved();
                 stopSelf();
-                //}
+            }
         }
 
         private void saveLocationOnDatabase(Location location) {
@@ -132,7 +133,7 @@ public class LocationService extends Service implements LocationListener {
             if (location.hasSpeed()) {
                 speed = location.getSpeed();
             }
-            int itemKey = Utils.getItemKeyFromSharedPref(mContext);
+            int itemKey = UtilsSharedPref.getItemKeyFromSharedPref(mContext);
             if (itemKey == -100)
                 return;
             LocationData dbData = new LocationData(timestamp, itemKey, latitude, longitude, altitude, speed);
