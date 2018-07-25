@@ -17,4 +17,6 @@
 
     <dimen name="btn_main_margin">16dp</dimen>
 
+    <dimen name="progressBar_size">48dp</dimen>
+
 </resources>

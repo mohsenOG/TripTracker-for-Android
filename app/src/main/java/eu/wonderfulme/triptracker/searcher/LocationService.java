@@ -114,11 +114,11 @@ public class LocationService extends Service implements LocationListener {
         }
 
         private void saveParkingLocation(Location location) {
-            if (location.hasAccuracy() && location.getAccuracy() <= PARKING_LOCATION_ACCURACY) {
+            //if (location.hasAccuracy() && location.getAccuracy() <= PARKING_LOCATION_ACCURACY) {
                 UtilsSharedPref.setParkingLocationToSharedPref(mContext, location);
                 broadcastParkingSaved();
                 stopSelf();
-            }
+            //}
         }
 
         private void saveLocationOnDatabase(Location location) {

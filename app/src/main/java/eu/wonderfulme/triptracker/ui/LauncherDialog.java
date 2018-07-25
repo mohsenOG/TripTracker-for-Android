@@ -29,7 +29,6 @@ import java.util.List;
 
 import eu.wonderfulme.triptracker.App;
 import eu.wonderfulme.triptracker.R;
-import eu.wonderfulme.triptracker.utility.Utils;
 import eu.wonderfulme.triptracker.searcher.SearchLocation;
 import eu.wonderfulme.triptracker.utility.UtilsSharedPref;
 
@@ -37,7 +36,7 @@ import static eu.wonderfulme.triptracker.searcher.SearchLocation.LOCATION_TYPE_S
 
 public class LauncherDialog extends Dialog implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback{
 
-    private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 100;
+    private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION_LAUNCHER = 100;
     public static final String ACTION_PARKING_LOCATION_SAVED = "ACTION_PARKING_LOCATION_SAVED";
     private Context mContext;
     private Button mSaveParkingButton;
@@ -130,7 +129,7 @@ public class LauncherDialog extends Dialog implements View.OnClickListener, Acti
         if (ContextCompat.checkSelfPermission(mParentActivity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // Permission is not granted. ask user.
             ActivityCompat.requestPermissions(mParentActivity, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
-                    MY_PERMISSIONS_REQUEST_FINE_LOCATION);
+                    MY_PERMISSIONS_REQUEST_FINE_LOCATION_LAUNCHER);
         } else {
             //Permission is already granted.
             checkGPSAndStartService();
@@ -195,7 +194,7 @@ public class LauncherDialog extends Dialog implements View.OnClickListener, Acti
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_FINE_LOCATION:
+            case MY_PERMISSIONS_REQUEST_FINE_LOCATION_LAUNCHER:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // permission was granted.
                     checkGPSAndStartService();
