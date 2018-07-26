@@ -13,7 +13,7 @@
         android:layout_height="@dimen/rv_item_route_text_view_height"
         android:gravity="center_vertical"
         android:textSize="@dimen/rv_item_route_text_size"
-        tools:text="@string/tmp_route_name"
+        tools:text="@string/bulk_route_name"
         android:focusable="true" />
 
     <View

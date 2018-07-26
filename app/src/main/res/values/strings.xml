@@ -9,16 +9,24 @@
     <string name="table_header_longitude" translatable="false">longitude</string>
     <string name="table_header_altitude" translatable="false">altitude</string>
     <string name="table_header_speed" translatable="false">speed</string>
-    <!-- Snackbar strings. -->
-    <string name="snackbar_export_csv_successful">Saved!</string>
-    <string name="snackbar_export_csv_failed">Export failed. Please try again.</string>
-    <string name="snackbar_goto_downloads">Downloads</string>
-    <string name="snackbar_remove_succeed">Route has been removed successfully.</string>
     <!-- Shared Preferences -->
     <string name="preference_filename" translatable="false">eu.wonderfulme.triptracker.sharedpreference</string>
     <string name="preference_record_period" translatable="false">preference_record_period</string>
     <string name="preference_item_key" translatable="false">preference_item_key</string>
     <string name="preference_parking_location" translatable="false">preference_parking_location</string>
+
+    <string name="pref_settings_record_type_title">Record type</string>
+    <string name="pref_settings_record_type_key" translatable="false">preference_settings_record_type_key</string>
+    <string name="pref_settings_record_type_dialog">Please choose a recording period.</string>
+    <string name="pref_settings_record_type_default_value" translatable="false">10</string>
+    <string name="pref_settings_record_type_title_car">Car</string>
+    <string name="pref_settings_record_type_value_car" translatable="false">10</string>
+    <string name="pref_settings_record_type_title_bicycle" >Bicycle</string>
+    <string name="pref_settings_record_type_value_bicycle" translatable="false">20</string>
+    <string name="pref_settings_record_type_title_walk">Walk</string>
+    <string name="pref_settings_record_type_value_walk" translatable="false">40</string>
+    <string name="pref_settings_record_type_title_custom">custom</string>
+    <string name="pref_settings_record_type_value_custom_bulk" translatable="false">60</string>
     <!-- Notifications -->
     <string name="notification_locationservice_title">Recording Location</string>
     <string name="notification_locationservice_content">Please remove this notification only from the app itself!</string>
@@ -33,21 +41,21 @@
     <string name="toast_gps_denied">Our app main functionality needs location. Please turn your gps on and try again.</string>
     <string name="toast_google_client_no_connection">Our app main functionality needs Google Services. Please login to you google account.</string>
     <string name="snackbar_put_app_in_background">Now you can put app in background!</string>
-
+    <string name="snackbar_export_csv_successful">Saved!</string>
+    <string name="snackbar_export_csv_failed">Export failed. Please try again.</string>
+    <string name="snackbar_goto_downloads">Downloads</string>
+    <string name="snackbar_remove_succeed">Route has been removed successfully.</string>
+    <!-- General -->
+    <string name="bulk_route_name" translatable="false">route name temp</string>
     <string name="gps_is_not_on">Your GPS seems to be disabled, do you want to enable it?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-
+    <!-- Buttons -->
     <string name="btn_save_parking">SAVE PARKING</string>
     <string name="btn_restore_parking">SHOW PARKING</string>
     <string name="btn_remove_parking">REMOVE PARKING</string>
-
-
-    <!-- MainActivity Strings. -->
-    <string name="tmp_route_name" translatable="false">route name temp</string>
     <string name="btn_main_record_start">RECORD</string>
     <string name="btn_main_record_stop">STOP RECORD</string>
-
     <!-- Actions -->
     <string name="action_setting">Settings</string>
     <string name="action_about">About</string>

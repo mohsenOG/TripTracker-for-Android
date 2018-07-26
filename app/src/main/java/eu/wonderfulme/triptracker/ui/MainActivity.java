@@ -27,7 +27,6 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.common.util.CollectionUtils;
-import com.google.android.gms.common.util.SharedPreferencesUtils;
 
 import java.util.List;
 
@@ -62,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        //TODO Save Instance state
 
         // Check the location if it is valid show the restore button.
         List<String> parkingLocation = UtilsSharedPref.getParkingLocationFromSharedPref(this);
@@ -105,8 +106,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_setting) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
         //TODO Functionality to menus.
+
     }
 
     @Override
