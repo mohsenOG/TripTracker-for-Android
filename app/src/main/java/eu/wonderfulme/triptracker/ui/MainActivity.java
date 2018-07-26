@@ -27,6 +27,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.common.util.CollectionUtils;
+import com.google.android.gms.common.util.SharedPreferencesUtils;
 
 import java.util.List;
 
@@ -38,18 +39,23 @@ import eu.wonderfulme.triptracker.searcher.SearchLocation;
 import eu.wonderfulme.triptracker.utility.UtilsSharedPref;
 
 import static eu.wonderfulme.triptracker.searcher.SearchLocation.LOCATION_TYPE_SINGLE;
+import static eu.wonderfulme.triptracker.searcher.SearchLocation.LOCATION_TYPE_TRACK;
 import static eu.wonderfulme.triptracker.ui.LauncherDialog.ACTION_PARKING_LOCATION_SAVED;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION_MAIN = 101;
+    private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION_MAIN_SINGLE = 101;
+    private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION_MAIN_TRACK = 102;
 
     @BindView(R.id.btn_main_save_parking) protected Button mSaveParkingButton;
     @BindView(R.id.btn_main_remove_parking) protected Button mRemoveParkingButton;
+    @BindView(R.id.btn_main_record) protected Button mRecordButton;
     @BindView(R.id.recyclerView_routes) protected RecyclerView mRecyclerView;
     @BindView(R.id.constraintLayout_mainActivity) protected ConstraintLayout mConstraintLayout;
     @BindView(R.id.progressBar_main) protected ProgressBar mProgressBar;
     private BroadcastReceiver mLocationServiceReceiver;
+    private boolean mIsEverythingDisabled = false;
+    private SearchLocation mTrackingService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,23 +106,44 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
+        //TODO Functionality to menus.
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem settingsItem = menu.findItem(R.id.action_setting);
+        MenuItem aboutItem = menu.findItem(R.id.action_about);
+        if (mIsEverythingDisabled) {
+            settingsItem.setEnabled(false);
+            aboutItem.setEnabled(false);
+        } else {
+            settingsItem.setEnabled(true);
+            aboutItem.setEnabled(true);
+        }
+        return true;
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_FINE_LOCATION_MAIN:
-                showProgressBar(false);
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission was granted.
-                    checkGPSAndStartService();
-                } else {
-                    // permission denied. Disable the functionality.
-                    Snackbar.make(mConstraintLayout, getString(R.string.toast_location_permission_denied), Snackbar.LENGTH_LONG).show();
-                }
-                break;
-            default:
-                break;
+        showProgressBar(false);
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            // permission was granted.
+            switch (requestCode) {
+                case MY_PERMISSIONS_REQUEST_FINE_LOCATION_MAIN_SINGLE:
+                    checkGPSAndStartParkingService();
+                    break;
+                case MY_PERMISSIONS_REQUEST_FINE_LOCATION_MAIN_TRACK:
+                    disableEverything();
+                    mRecordButton.setText(R.string.btn_main_record_stop);
+                    checkGPSAndStartTrackingService();
+                    Snackbar.make(mConstraintLayout, getString(R.string.snackbar_put_app_in_background), Snackbar.LENGTH_LONG).show();
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            // permission denied. Disable the functionality.
+            Snackbar.make(mConstraintLayout, getString(R.string.toast_location_permission_denied), Snackbar.LENGTH_LONG).show();
         }
     }
 
@@ -137,7 +164,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onRecordClicked(View v) {
-
+        // if record button is clicked.
+        if (mRecordButton.getText().toString().equals(getString(R.string.btn_main_record_start))) {
+            // Check permission
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // Permission is not granted. ask user.
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_FINE_LOCATION_MAIN_TRACK);
+            } else {
+                //Permission is already granted.
+                disableEverything();
+                mRecordButton.setText(R.string.btn_main_record_stop);
+                checkGPSAndStartTrackingService();
+                Snackbar.make(mConstraintLayout, getString(R.string.snackbar_put_app_in_background), Snackbar.LENGTH_LONG).show();
+            }
+        } else { // if stop record is clicked.
+            mTrackingService.stopService();
+            mRecordButton.setText(getString(R.string.btn_main_record_start));
+            enableEverything();
+        }
     }
 
     private void showProgressBar(boolean show) {
@@ -150,10 +195,10 @@ public class MainActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // Permission is not granted. ask user.
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
-                    MY_PERMISSIONS_REQUEST_FINE_LOCATION_MAIN);
+                    MY_PERMISSIONS_REQUEST_FINE_LOCATION_MAIN_SINGLE);
         } else {
             //Permission is already granted.
-            checkGPSAndStartService();
+            checkGPSAndStartParkingService();
         }
     }
 
@@ -180,11 +225,24 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void checkGPSAndStartService() {
+    private void checkGPSAndStartParkingService() {
         SearchLocation searchLocation = new SearchLocation(this, LOCATION_TYPE_SINGLE);
         boolean isGpsOn = searchLocation.isGpsOn();
         if (App.getGoogleApiHelper().isConnected() && isGpsOn){
             searchLocation.startService();
+        } else {
+            showProgressBar(false);
+            buildAlertMessageNoGps();
+        }
+    }
+
+    private void checkGPSAndStartTrackingService() {
+        if (mTrackingService == null) {
+            mTrackingService = new SearchLocation(this, LOCATION_TYPE_TRACK);
+        }
+        boolean isGpsOn = mTrackingService.isGpsOn();
+        if (App.getGoogleApiHelper().isConnected() && isGpsOn){
+            mTrackingService.startService();
         } else {
             showProgressBar(false);
             buildAlertMessageNoGps();
@@ -209,6 +267,31 @@ public class MainActivity extends AppCompatActivity {
                 });
         final AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    private void enableEverything() {
+        for (int i = 0; i < mConstraintLayout.getChildCount(); ++i) {
+            View v = mConstraintLayout.getChildAt(i);
+            if (v.getId() != R.id.btn_main_record) {
+                v.setEnabled(true);
+            }
+        }
+        // Check remove and show parking buttons to enable them accordingly.
+        List<String> parkingLocation = UtilsSharedPref.getParkingLocationFromSharedPref(this);
+        mSaveParkingButton.setEnabled(parkingLocation == null);
+        mRemoveParkingButton.setEnabled(parkingLocation != null);
+
+        mIsEverythingDisabled = false;
+    }
+
+    private void disableEverything() {
+        for (int i = 0; i < mConstraintLayout.getChildCount(); ++i) {
+            View v = mConstraintLayout.getChildAt(i);
+            if (v.getId() != R.id.btn_main_record) {
+                v.setEnabled(false);
+            }
+        }
+        mIsEverythingDisabled = true;
     }
 
 }

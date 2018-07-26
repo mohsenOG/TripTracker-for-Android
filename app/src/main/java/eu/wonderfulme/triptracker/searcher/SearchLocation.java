@@ -34,7 +34,7 @@ public class SearchLocation {
             mContext.startService(mServiceIntent);
     }
 
-    public void stopLocationService() {
+    public void stopService() {
             mContext.stopService(mServiceIntent);
     }
 }
