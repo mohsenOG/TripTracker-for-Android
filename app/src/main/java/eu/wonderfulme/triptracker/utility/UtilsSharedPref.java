@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -19,12 +21,12 @@ public class UtilsSharedPref {
         return context.getSharedPreferences(context.getString(R.string.preference_filename), Context.MODE_PRIVATE);
     }
 
-//    static public void setRecordPeriodToSharedPref(Context context, int recordPeriod) {
-//        SharedPreferences sharedPreferences = Utils.getSharedPref(context);
-//        SharedPreferences.Editor editor = sharedPreferences.edit();
-//        editor.putInt(context.getString(R.string.preference_record_period), recordPeriod)
-//                .apply();
-//    }
+    static public void setRecordPeriodToSharedPref(Context context, int recordPeriod) {
+        SharedPreferences sharedPreferences = UtilsSharedPref.getSharedPref(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(context.getString(R.string.preference_record_period), recordPeriod)
+                .apply();
+    }
 
     static public int getRecordPeriodFromSharedPref(Context context) {
         SharedPreferences sharedPreferences = UtilsSharedPref.getSharedPref(context);
@@ -62,5 +64,17 @@ public class UtilsSharedPref {
         Set<String> location = sharedPref.getStringSet(context.getString(R.string.preference_parking_location), null);
         if (location == null) return null;
         return new ArrayList<>(location);
+    }
+
+    static public int recordPeriodFinder(Context context, String recordType) {
+        if (StringUtils.equals(recordType, context.getString(R.string.pref_settings_record_type_car))) {
+            return 10;
+        } else if (StringUtils.equals(recordType, context.getString(R.string.pref_settings_record_type_bicycle))) {
+            return 25;
+        } else if (StringUtils.equals(recordType, context.getString(R.string.pref_settings_record_type_walk))) {
+            return 40;
+        } else {
+            return 20;
+        }
     }
 }

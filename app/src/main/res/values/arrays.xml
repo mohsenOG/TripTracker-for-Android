@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="record_type_items">
-        <item>@string/pref_settings_record_type_title_car</item>
-        <item>@string/pref_settings_record_type_title_bicycle</item>
-        <item>@string/pref_settings_record_type_title_walk</item>
-        <item>@string/pref_settings_record_type_title_custom</item>
+        <item>@string/pref_settings_record_type_car</item>
+        <item>@string/pref_settings_record_type_bicycle</item>
+        <item>@string/pref_settings_record_type_walk</item>
+        <item>@string/pref_settings_record_type_custom</item>
     </string-array>
 
-    <string-array name="record_type_items_values">
-        <item>@string/pref_settings_record_type_value_car</item>
-        <item>@string/pref_settings_record_type_value_bicycle</item>
-        <item>@string/pref_settings_record_type_value_walk</item>
-        <item>@string/pref_settings_record_type_value_custom_bulk</item>
-    </string-array>
 
 </resources>

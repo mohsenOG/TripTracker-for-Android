@@ -26,8 +26,6 @@ public class RoutesRecyclerViewAdapter extends RecyclerView.Adapter<RoutesRecycl
         return 0;
     }
 
-
-
     class ViewHolder extends RecyclerView.ViewHolder {
 
         public ViewHolder(View itemView) {

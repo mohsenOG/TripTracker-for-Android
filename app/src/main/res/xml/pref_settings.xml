@@ -6,9 +6,9 @@
         android:key="@string/pref_settings_record_type_key"
         android:title="@string/pref_settings_record_type_title"
         android:dialogTitle="@string/pref_settings_record_type_dialog"
-        android:defaultValue="@string/pref_settings_record_type_default_value"
+        android:defaultValue="@string/pref_settings_record_type_car"
         android:entries="@array/record_type_items"
-        android:entryValues="@array/record_type_items_values"
+        android:entryValues="@array/record_type_items"
         />
 
 </PreferenceScreen>
