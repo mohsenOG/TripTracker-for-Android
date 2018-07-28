@@ -17,4 +17,7 @@ public interface LocationDao {
 
     @Query("DELETE FROM LocationData WHERE item_key = :itemKey")
     void deleteSingleItem(int itemKey);
+
+    @Query("SELECT * FROM LocationData ORDER BY item_key DESC LIMIT 1")
+    int getLastItemKey();
 }

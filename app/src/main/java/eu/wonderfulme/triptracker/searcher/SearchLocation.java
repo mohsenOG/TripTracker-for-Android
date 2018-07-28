@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.location.LocationManager;
 
 
+import eu.wonderfulme.triptracker.utility.UtilsSharedPref;
+
 import static eu.wonderfulme.triptracker.searcher.LocationService.INTENT_EXTRA_LOCATION_REQUEST_TYPE;
 
 public class SearchLocation {
@@ -31,7 +33,9 @@ public class SearchLocation {
     }
 
     public void startService() {
-            mContext.startService(mServiceIntent);
+        int lastItemKey = UtilsSharedPref.getLastItemKeyFromSharedPref(mContext);
+        UtilsSharedPref.setItemKeyToSharedPref(mContext, lastItemKey + 1);
+        mContext.startService(mServiceIntent);
     }
 
     public void stopService() {

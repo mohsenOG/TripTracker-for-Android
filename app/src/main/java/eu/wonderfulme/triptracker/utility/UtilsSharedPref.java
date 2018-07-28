@@ -33,9 +33,17 @@ public class UtilsSharedPref {
         return sharedPreferences.getInt(context.getString(R.string.preference_record_period), 10);
     }
 
-    static public int getItemKeyFromSharedPref(Context context) {
+    static public int getLastItemKeyFromSharedPref(Context context) {
         SharedPreferences sharedPreferences = UtilsSharedPref.getSharedPref(context);
         return sharedPreferences.getInt(context.getString(R.string.preference_item_key), -100);
+    }
+
+    static public void setItemKeyToSharedPref(Context context, int lastItemKey) {
+        SharedPreferences sharedPreferences = UtilsSharedPref.getSharedPref(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(context.getString(R.string.preference_item_key), lastItemKey);
+        editor.apply();
+
     }
 
     static public void setParkingLocationToSharedPref(Context context, Location location) {
