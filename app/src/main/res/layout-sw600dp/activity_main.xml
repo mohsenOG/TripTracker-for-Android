@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.MainActivity"
+    android:id="@+id/constraintLayout_mainActivity">
+
+    <Button
+        android:id="@+id/btn_main_save_parking"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/btn_main_margin"
+        android:text="@string/btn_save_parking"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/vertical_gl_0_3"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btn_main_remove_parking"
+        android:focusable="true"
+        android:nextFocusRight="@id/recyclerView_routes"
+        android:nextFocusDown="@id/btn_main_remove_parking"
+        android:onClick="onSaveParkingClicked"/>
+
+    <Button
+        android:id="@+id/btn_main_remove_parking"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/btn_main_margin"
+        android:text="@string/btn_remove_parking"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/vertical_gl_0_3"
+        app:layout_constraintTop_toBottomOf="@id/btn_main_save_parking"
+        app:layout_constraintBottom_toTopOf="@id/btn_main_record"
+        android:focusable="true"
+        android:nextFocusUp="@id/btn_main_save_parking"
+        android:nextFocusDown="@id/btn_main_record"
+        android:nextFocusRight="@id/recyclerView_routes"
+        android:onClick="onRemoveParkingClicked"/>
+
+    <Button
+        android:id="@+id/btn_main_record"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/btn_main_margin"
+        android:text="@string/btn_main_record_start"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/vertical_gl_0_3"
+        app:layout_constraintTop_toBottomOf="@id/btn_main_remove_parking"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:focusable="true"
+        android:nextFocusUp="@id/btn_main_remove_parking"
+        android:nextFocusRight="@id/recyclerView_routes"
+        android:onClick="onRecordClicked"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/vertical_gl_0_3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.3"
+        android:focusable="false"/>
+
+    <ProgressBar
+        android:id="@+id/progressBar_main"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="@dimen/progressBar_size"
+        android:layout_height="@dimen/progressBar_size"
+        app:layout_constraintStart_toEndOf="@id/vertical_gl_0_3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:focusable="false"
+        android:visibility="gone"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView_routes"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toEndOf="@id/vertical_gl_0_3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:focusable="true"
+        android:nextFocusUp="@id/btn_main_record" />
+
+
+</android.support.constraint.ConstraintLayout>
