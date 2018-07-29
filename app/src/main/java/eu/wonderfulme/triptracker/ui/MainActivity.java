@@ -17,6 +17,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -45,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION_MAIN_SINGLE = 101;
     private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION_MAIN_TRACK = 102;
+    private final String KEY_RECYCLER_VIEW_SAVE_STATE = "KEY_RECYCLER_VIEW_SAVE_STATE";
+
 
     @BindView(R.id.btn_main_save_parking) protected Button mSaveParkingButton;
     @BindView(R.id.btn_main_remove_parking) protected Button mRemoveParkingButton;
@@ -62,7 +65,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        //TODO Save Instance state
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        if (savedInstanceState != null) {
+            mRecyclerView.getLayoutManager().onRestoreInstanceState(savedInstanceState.getParcelable(KEY_RECYCLER_VIEW_SAVE_STATE));
+            //TODO restore other Instance state
+        }
 
         // Check the location if it is valid show the restore button.
         List<String> parkingLocation = UtilsSharedPref.getParkingLocationFromSharedPref(this);
@@ -95,6 +102,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mLocationServiceReceiver);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        savedInstanceState.putParcelable(KEY_RECYCLER_VIEW_SAVE_STATE, mRecyclerView.getLayoutManager().onSaveInstanceState());
+        //TODO save state Instance
     }
 
     @Override
