@@ -46,6 +46,18 @@ public class UtilsSharedPref {
 
     }
 
+    static public void setNukeDbChecker(Context context, boolean value) {
+        SharedPreferences sharedPreferences = UtilsSharedPref.getSharedPref(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(context.getString(R.string.preference_nuke_db_checker), value);
+        editor.apply();
+    }
+
+    static public boolean getNukeDbChecker(Context context) {
+        SharedPreferences sharedPreferences = UtilsSharedPref.getSharedPref(context);
+        return sharedPreferences.getBoolean(context.getString(R.string.preference_nuke_db_checker), false);
+    }
+
     static public void setParkingLocationToSharedPref(Context context, Location location) {
         SharedPreferences sharedPreferences = UtilsSharedPref.getSharedPref(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();

@@ -25,7 +25,7 @@ public class RemoveAsyncTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... voids) {
-        LocationDbSingleton.getInstance(mContext).locationDao().deleteSingleItem(mItemKey);
+        LocationDbSingleton.getInstance(mContext).locationDao().deleteSingleItemKey(mItemKey);
         return null;
     }
 

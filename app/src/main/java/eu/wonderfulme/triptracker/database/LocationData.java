@@ -11,6 +11,18 @@ import eu.wonderfulme.triptracker.R;
 @Entity
 public class LocationData {
 
+    @PrimaryKey
+    @NonNull
+    private String timestamp;
+
+    @ColumnInfo(name = "item_key")
+    private int itemKey;
+
+    private double latitude;
+    private double longitude;
+    private double altitude;
+    private float speed;
+
     /**
      * this function is used to return the headers for CSV file.
      */
@@ -37,18 +49,6 @@ public class LocationData {
         this.altitude = altitude;
         this.speed = speed;
     }
-
-    @PrimaryKey
-    @NonNull
-    private String timestamp;
-
-    @ColumnInfo(name = "item_key")
-    private int itemKey;
-
-    private double latitude;
-    private double longitude;
-    private double altitude;
-    private float speed;
 
     @NonNull
     public String getTimestamp() {

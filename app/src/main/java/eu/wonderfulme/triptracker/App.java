@@ -4,10 +4,16 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.os.AsyncTask;
 
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 import eu.wonderfulme.triptracker.database.LocationDbSingleton;
+import eu.wonderfulme.triptracker.tasks.NukeDatabaseWorker;
 import eu.wonderfulme.triptracker.utility.GoogleApiHelper;
 import com.crashlytics.android.Crashlytics;
 
+import java.util.concurrent.TimeUnit;
+
+import eu.wonderfulme.triptracker.utility.Utils;
 import eu.wonderfulme.triptracker.utility.UtilsSharedPref;
 import io.fabric.sdk.android.Fabric;
 
@@ -27,6 +33,8 @@ public class App extends Application {
         mGoogleApiHelper = new GoogleApiHelper(mInstance);
         //Init the last DB itemKey to shared Prefs.
         new ItemKeyInitializerAsyncTask().execute();
+        // Check if db should be nuked
+        nukeDbChecker();
     }
 
     public static synchronized App getInstance() {
@@ -49,6 +57,17 @@ public class App extends Application {
             int lastItemKey = LocationDbSingleton.getInstance(mInstance).locationDao().getLastItemKey();
             UtilsSharedPref.setItemKeyToSharedPref(mInstance, lastItemKey);
             return null;
+        }
+    }
+
+    private void nukeDbChecker() {
+        boolean initWorker = UtilsSharedPref.getNukeDbChecker(mInstance);
+        if (!initWorker) {
+            PeriodicWorkRequest.Builder nukeDbBuilder =  new PeriodicWorkRequest.Builder(NukeDatabaseWorker.class, 1, TimeUnit.DAYS);
+            PeriodicWorkRequest worker = nukeDbBuilder.build();
+            WorkManager.getInstance().enqueue(worker);
+            //Set the shared pref to true.
+            UtilsSharedPref.setNukeDbChecker(mInstance, true);
         }
     }
 }

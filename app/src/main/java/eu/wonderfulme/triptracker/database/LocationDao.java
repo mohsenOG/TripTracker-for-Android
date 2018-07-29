@@ -16,8 +16,11 @@ public interface LocationDao {
     List<LocationData> getDbData(int itemKey);
 
     @Query("DELETE FROM LocationData WHERE item_key = :itemKey")
-    void deleteSingleItem(int itemKey);
+    void deleteSingleItemKey(int itemKey);
 
     @Query("SELECT * FROM LocationData ORDER BY item_key DESC LIMIT 1")
     int getLastItemKey();
+
+    @Query("DELETE FROM LocationData WHERE timestamp <= :checkTime")
+    void nukeRowsMoreThan30Days(String checkTime);
 }
