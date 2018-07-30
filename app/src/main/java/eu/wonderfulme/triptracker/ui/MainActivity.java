@@ -19,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -35,6 +36,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import eu.wonderfulme.triptracker.App;
 import eu.wonderfulme.triptracker.R;
+import eu.wonderfulme.triptracker.searcher.LocationService;
 import eu.wonderfulme.triptracker.searcher.SearchLocation;
 import eu.wonderfulme.triptracker.utility.UtilsSharedPref;
 
@@ -42,7 +44,7 @@ import static eu.wonderfulme.triptracker.searcher.SearchLocation.LOCATION_TYPE_S
 import static eu.wonderfulme.triptracker.searcher.SearchLocation.LOCATION_TYPE_TRACK;
 import static eu.wonderfulme.triptracker.ui.LauncherDialog.ACTION_PARKING_LOCATION_SAVED;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements RoutesRecyclerViewAdapter.ItemClickListener {
 
     private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION_MAIN_SINGLE = 101;
     private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION_MAIN_TRACK = 102;
@@ -53,23 +55,20 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.btn_main_remove_parking) protected Button mRemoveParkingButton;
     @BindView(R.id.btn_main_record) protected Button mRecordButton;
     @BindView(R.id.recyclerView_routes) protected RecyclerView mRecyclerView;
+    private RoutesRecyclerViewAdapter mAdapter;
+
     @BindView(R.id.constraintLayout_mainActivity) protected ConstraintLayout mConstraintLayout;
     @BindView(R.id.progressBar_main) protected ProgressBar mProgressBar;
     private BroadcastReceiver mLocationServiceReceiver;
     private boolean mIsEverythingDisabled = false;
     private SearchLocation mTrackingService;
+    private List<Pair<Integer, String>> mRoutes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        if (savedInstanceState != null) {
-            mRecyclerView.getLayoutManager().onRestoreInstanceState(savedInstanceState.getParcelable(KEY_RECYCLER_VIEW_SAVE_STATE));
-            //TODO restore other Instance state
-        }
 
         // Check the location if it is valid show the restore button.
         List<String> parkingLocation = UtilsSharedPref.getParkingLocationFromSharedPref(this);
@@ -89,6 +88,10 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar.make(mConstraintLayout, getString(R.string.toast_parking_saved), Snackbar.LENGTH_LONG).show();
             }
         };
+
+        //TODO Initiate/update the recycler view in a asynctask.
+        //initRecyclerView();
+        //mAdapter.swapData(items);
     }
 
     @Override
@@ -105,10 +108,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(KEY_RECYCLER_VIEW_SAVE_STATE, mRecyclerView.getLayoutManager().onSaveInstanceState());
+
+        //TODO save Instance state
+    }
+
+    @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        savedInstanceState.putParcelable(KEY_RECYCLER_VIEW_SAVE_STATE, mRecyclerView.getLayoutManager().onSaveInstanceState());
-        //TODO save state Instance
+        mRecyclerView.getLayoutManager().onRestoreInstanceState(savedInstanceState.getParcelable(KEY_RECYCLER_VIEW_SAVE_STATE));
+        //TODO restore state Instance
     }
 
     @Override
@@ -167,6 +178,13 @@ public class MainActivity extends AppCompatActivity {
             // permission denied. Disable the functionality.
             Snackbar.make(mConstraintLayout, getString(R.string.toast_location_permission_denied), Snackbar.LENGTH_LONG).show();
         }
+    }
+
+    private void initRecyclerView() {
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mAdapter = new RoutesRecyclerViewAdapter(this, mRoutes);
+        mAdapter.setItemClickListener(this);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     public void onSaveParkingClicked(View v) {
@@ -316,4 +334,8 @@ public class MainActivity extends AppCompatActivity {
         mIsEverythingDisabled = true;
     }
 
+    @Override
+    public void onItemClick(Pair<Integer, String> item) {
+        //TODO Handle item clicks.
+    }
 }
