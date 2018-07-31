@@ -2,15 +2,18 @@ package eu.wonderfulme.triptracker;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
+import android.location.Location;
 import android.os.AsyncTask;
 
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
+import eu.wonderfulme.triptracker.database.LocationData;
 import eu.wonderfulme.triptracker.database.LocationDbSingleton;
 import eu.wonderfulme.triptracker.tasks.NukeDatabaseWorker;
 import eu.wonderfulme.triptracker.utility.GoogleApiHelper;
 import com.crashlytics.android.Crashlytics;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import eu.wonderfulme.triptracker.utility.Utils;

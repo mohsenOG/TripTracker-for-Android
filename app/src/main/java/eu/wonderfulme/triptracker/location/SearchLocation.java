@@ -1,4 +1,4 @@
-package eu.wonderfulme.triptracker.searcher;
+package eu.wonderfulme.triptracker.location;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,7 +7,7 @@ import android.location.LocationManager;
 
 import eu.wonderfulme.triptracker.utility.UtilsSharedPref;
 
-import static eu.wonderfulme.triptracker.searcher.LocationService.INTENT_EXTRA_LOCATION_REQUEST_TYPE;
+import static eu.wonderfulme.triptracker.location.LocationService.INTENT_EXTRA_LOCATION_REQUEST_TYPE;
 
 public class SearchLocation {
 
@@ -16,11 +16,13 @@ public class SearchLocation {
 
     private Context mContext;
     private Intent mServiceIntent;
+    private int mRequestType;
 
     public SearchLocation(Context context, int requestType) {
         this.mContext = context;
+        mRequestType = requestType;
         this.mServiceIntent = new Intent(mContext, LocationService.class);
-        mServiceIntent.putExtra(INTENT_EXTRA_LOCATION_REQUEST_TYPE, requestType);
+        mServiceIntent.putExtra(INTENT_EXTRA_LOCATION_REQUEST_TYPE, mRequestType);
     }
 
     public boolean isGpsOn() {
@@ -33,8 +35,10 @@ public class SearchLocation {
     }
 
     public void startService() {
-        int lastItemKey = UtilsSharedPref.getLastItemKeyFromSharedPref(mContext);
-        UtilsSharedPref.setItemKeyToSharedPref(mContext, lastItemKey + 1);
+        if (mRequestType == LOCATION_TYPE_TRACK) {
+            int lastItemKey = UtilsSharedPref.getLastItemKeyFromSharedPref(mContext);
+            UtilsSharedPref.setItemKeyToSharedPref(mContext, lastItemKey + 1);
+        }
         mContext.startService(mServiceIntent);
     }
 

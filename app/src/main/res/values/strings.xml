@@ -20,7 +20,7 @@
     <string name="pref_settings_record_type_key" translatable="false">preference_settings_record_type_key</string>
     <string name="pref_settings_record_type_dialog">Please choose a recording period.</string>
     <string name="pref_settings_record_type_car">Car</string>
-    <string name="pref_settings_record_type_bicycle" >Bicycle</string>
+    <string name="pref_settings_record_type_bicycle">Bicycle</string>
     <string name="pref_settings_record_type_walk">Walk</string>
     <string name="pref_settings_record_type_custom">custom</string>
     <!-- Notifications -->
@@ -41,6 +41,7 @@
     <string name="snackbar_export_csv_failed">Export failed. Please try again.</string>
     <string name="snackbar_goto_downloads">Downloads</string>
     <string name="snackbar_remove_succeed">Route has been removed successfully.</string>
+    <string name="snackbar_record_finished">Recording location finished.</string>
     <!-- General -->
     <string name="bulk_route_name" translatable="false">route name temp</string>
     <string name="gps_is_not_on">Your GPS seems to be disabled, do you want to enable it?</string>

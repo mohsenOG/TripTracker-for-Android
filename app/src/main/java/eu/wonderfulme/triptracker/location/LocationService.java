@@ -1,4 +1,4 @@
-package eu.wonderfulme.triptracker.searcher;
+package eu.wonderfulme.triptracker.location;
 
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
@@ -24,8 +24,7 @@ import eu.wonderfulme.triptracker.database.LocationData;
 import eu.wonderfulme.triptracker.tasks.InsertLocationAsyncTask;
 import eu.wonderfulme.triptracker.utility.UtilsSharedPref;
 
-import static eu.wonderfulme.triptracker.searcher.SearchLocation.LOCATION_TYPE_TRACK;
-import static eu.wonderfulme.triptracker.ui.LauncherDialog.ACTION_PARKING_LOCATION_SAVED;
+import static eu.wonderfulme.triptracker.location.SearchLocation.LOCATION_TYPE_TRACK;
 
 public class LocationService extends Service implements LocationListener {
 
@@ -33,6 +32,9 @@ public class LocationService extends Service implements LocationListener {
     private static final String NOTIFICATION_CHANNEL_NAME = "NOTIFICATION_CHANNEL_NAME";
     private static final String NOTIFICATION_CHANNEL_ID = "100";
     private static final int NOTIFICATION_ID = 110;
+
+    public static final String ACTION_PARKING_LOCATION_SAVED = "ACTION_PARKING_LOCATION_SAVED";
+
     private static final int PARKING_LOCATION_ACCURACY = 15;
     private LocationRequest mLocationRequest;
     private MyLocationCallback mLocationCallback;
@@ -55,7 +57,9 @@ public class LocationService extends Service implements LocationListener {
         // Check how the service should implement.
         if (mLocationRequestType == LOCATION_TYPE_TRACK) {
             mRecordPeriodInSeconds = UtilsSharedPref.getRecordPeriodFromSharedPref(this);
-            mLocationRequest.setInterval(mRecordPeriodInSeconds * 1000);
+            //TODO Correct setIntervals
+            //mLocationRequest.setInterval(mRecordPeriodInSeconds * 1000);
+            mLocationRequest.setInterval(0);
             StartRequestLocation();
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
@@ -114,6 +118,7 @@ public class LocationService extends Service implements LocationListener {
         }
 
         private void saveParkingLocation(Location location) {
+            //TODO Correct the accuracy
             //if (location.hasAccuracy() && location.getAccuracy() <= PARKING_LOCATION_ACCURACY) {
                 UtilsSharedPref.setParkingLocationToSharedPref(mContext, location);
                 broadcastParkingSaved();

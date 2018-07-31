@@ -1,6 +1,7 @@
 package eu.wonderfulme.triptracker.ui;
 
 import android.content.Context;
+import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Pair;
@@ -9,24 +10,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import eu.wonderfulme.triptracker.R;
+import eu.wonderfulme.triptracker.database.LocationHeaderData;
 
 public class RoutesRecyclerViewAdapter extends RecyclerView.Adapter<RoutesRecyclerViewAdapter.ViewHolder> {
 
     public interface ItemClickListener {
-        void onItemClick(Pair<Integer, String> item);
+        void onItemClick(LocationHeaderData item);
     }
 
     private ItemClickListener mItemClickListener;
-    private List<Pair<Integer, String>> mItems;
+    private List<LocationHeaderData> mItems;
     private Context mContext;
 
-    public RoutesRecyclerViewAdapter(Context context, List<Pair<Integer, String>> items) {
+    public RoutesRecyclerViewAdapter(Context context, List<LocationHeaderData> items) {
         this.mItems = items;
         this.mContext = context;
     }
@@ -53,7 +54,7 @@ public class RoutesRecyclerViewAdapter extends RecyclerView.Adapter<RoutesRecycl
         mItemClickListener = itemClickListener;
     }
 
-    void swapData(List<Pair<Integer, String>> newData) {
+    void swapData(List<LocationHeaderData> newData) {
         if (newData == null || newData.size() == 0) {
             mItems.clear();
         } else {
@@ -67,7 +68,7 @@ public class RoutesRecyclerViewAdapter extends RecyclerView.Adapter<RoutesRecycl
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.tv_route_name) TextView mRouteNamesTextView;
-        Pair<Integer, String> mItem;
+        LocationHeaderData mItem;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -76,13 +77,14 @@ public class RoutesRecyclerViewAdapter extends RecyclerView.Adapter<RoutesRecycl
 
         @Override
         public void onClick(View v) {
-            if(mItemClickListener != null && mItem.first != -1 && !mRouteNamesTextView.getText().toString().isEmpty())
+            int itemKey = mItem.getItem_key();
+            if(mItemClickListener != null && itemKey != -1 && !mRouteNamesTextView.getText().toString().isEmpty())
                 mItemClickListener.onItemClick(mItem);
         }
 
-        void bindView(Pair<Integer, String> item) {
+        void bindView(LocationHeaderData item) {
             mItem = item;
-            mRouteNamesTextView.setText(item.second);
+            mRouteNamesTextView.setText(item.getTimestamp());
         }
     }
 }

@@ -29,15 +29,15 @@ import java.util.List;
 
 import eu.wonderfulme.triptracker.App;
 import eu.wonderfulme.triptracker.R;
-import eu.wonderfulme.triptracker.searcher.SearchLocation;
+import eu.wonderfulme.triptracker.location.SearchLocation;
 import eu.wonderfulme.triptracker.utility.UtilsSharedPref;
 
-import static eu.wonderfulme.triptracker.searcher.SearchLocation.LOCATION_TYPE_SINGLE;
+import static eu.wonderfulme.triptracker.location.LocationService.ACTION_PARKING_LOCATION_SAVED;
+import static eu.wonderfulme.triptracker.location.SearchLocation.LOCATION_TYPE_SINGLE;
 
 public class LauncherDialog extends Dialog implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback{
 
     private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION_LAUNCHER = 100;
-    public static final String ACTION_PARKING_LOCATION_SAVED = "ACTION_PARKING_LOCATION_SAVED";
     private Context mContext;
     private Button mSaveParkingButton;
     private Button mOpenAppButton;
