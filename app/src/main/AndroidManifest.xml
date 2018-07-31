@@ -28,7 +28,6 @@
             android:theme="@style/AppTheme.Transparent">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -45,7 +44,24 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.SettingsActivity" />
         </activity>
-        <activity android:name=".ui.DetailActivity"></activity>
+        <!-- Detail Activity -->
+        <activity
+            android:name=".ui.DetailActivity"
+            android:parentActivityName=".ui.MainActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.DetailActivity" />
+        </activity>
+        <!-- About Activity -->
+        <activity
+            android:name=".ui.AboutActivity"
+            android:parentActivityName=".ui.MainActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.AboutActivity" />
+        </activity>
     </application>
 
 </manifest>

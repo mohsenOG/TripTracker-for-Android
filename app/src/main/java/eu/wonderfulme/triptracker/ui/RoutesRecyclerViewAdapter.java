@@ -73,6 +73,7 @@ public class RoutesRecyclerViewAdapter extends RecyclerView.Adapter<RoutesRecycl
         ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
         }
 
         @Override
@@ -84,7 +85,7 @@ public class RoutesRecyclerViewAdapter extends RecyclerView.Adapter<RoutesRecycl
 
         void bindView(LocationHeaderData item) {
             mItem = item;
-            mRouteNamesTextView.setText(item.getTimestamp());
+            mRouteNamesTextView.setText(item.getMinTimestamp());
         }
     }
 }

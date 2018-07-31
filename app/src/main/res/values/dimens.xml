@@ -8,7 +8,6 @@
     <dimen name="dialog_btn_padding">8dp</dimen>
     <dimen name="dialog_btn_text_size">14sp</dimen>
 
-
     <dimen name="rv_item_route_padding">16dp</dimen>
     <dimen name="rv_item_route_height">48dp</dimen>
     <dimen name="rv_item_route_text_view_height">47dp</dimen>
@@ -18,5 +17,8 @@
     <dimen name="btn_main_margin">16dp</dimen>
 
     <dimen name="progressBar_size">48dp</dimen>
+
+    <dimen name="margin_about">16dp</dimen>
+    <dimen name="margin_about_less">8dp</dimen>
 
 </resources>
