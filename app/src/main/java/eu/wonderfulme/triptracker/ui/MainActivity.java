@@ -33,7 +33,6 @@ import com.google.android.gms.common.util.CollectionUtils;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,7 +58,8 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
     private final String KEY_IS_EVERYTHING_DISABLED_SAVE_STATE = "KEY_IS_EVERYTHING_DISABLED_SAVE_STATE";
     private final String KEY_TRACKING_SERVICE_SAVE_STATE = "KEY_TRACKING_SERVICE_SAVE_STATE";
     static final int ITEM_REMOVED_REQUEST = 103;
-    static final String INTENT_EXTRA_ROUTE_DETAIL = "INTENT_EXTRA_ROUTE_DETAIL";
+    static final String INTENT_EXTRA_ITEM_KEY = "INTENT_EXTRA_ITEM_KEY";
+    static final String INTENT_EXTRA_ROUTE_NAME = "INTENT_EXTRA_ROUTE_NAME";
 
     @BindView(R.id.btn_main_save_parking) protected Button mSaveParkingButton;
     @BindView(R.id.btn_main_remove_parking) protected Button mRemoveParkingButton;
@@ -357,7 +357,8 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
     @Override
     public void onItemClick(LocationHeaderData headerData) {
         Intent routeItemIntent = new Intent(this, DetailActivity.class);
-        routeItemIntent.putExtra(INTENT_EXTRA_ROUTE_DETAIL, headerData);
+        routeItemIntent.putExtra(INTENT_EXTRA_ITEM_KEY, headerData.getItem_key());
+        routeItemIntent.putExtra(INTENT_EXTRA_ROUTE_NAME, headerData.getMinTimestamp());
         startActivityForResult(routeItemIntent, ITEM_REMOVED_REQUEST);
     }
 

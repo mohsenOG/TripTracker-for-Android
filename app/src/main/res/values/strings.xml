@@ -49,12 +49,16 @@
     <string name="no">No</string>
     <string name="apply">APPLY</string>
     <string name="select_period_hint">Please choose a record period (seconds)</string>
+    <string name="remove_route">Remove Route</string>
+    <string name="remove_route_msg">Are you sure?</string>
     <!-- Buttons -->
     <string name="btn_save_parking">SAVE PARKING</string>
     <string name="btn_restore_parking">SHOW PARKING</string>
     <string name="btn_remove_parking">REMOVE PARKING</string>
     <string name="btn_main_record_start">RECORD</string>
     <string name="btn_main_record_stop">STOP RECORD</string>
+    <string name="btn_detail_export">EXPORT CSV</string>
+    <string name="btn_detail_remove">REMOVE</string>
     <!-- Actions -->
     <string name="action_setting">Settings</string>
     <string name="action_about">About</string>

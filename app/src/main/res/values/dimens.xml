@@ -20,5 +20,6 @@
 
     <dimen name="margin_about">16dp</dimen>
     <dimen name="margin_about_less">8dp</dimen>
+    <dimen name="btn_detail_height">50dp</dimen>
 
 </resources>

@@ -24,6 +24,7 @@ android {
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
+        resValue("string", "GOOGLE_MAPS_API_KEY", GOOGLE_MAPS_API_KEY)
     }
     buildTypes {
         release {
@@ -45,6 +46,7 @@ dependencies {
     implementation "com.android.support:preference-v7:$support_sdk_version"
     def play_services_version = "15.0.1"
     implementation "com.google.android.gms:play-services-location:$play_services_version"
+    implementation "com.google.android.gms:play-services-maps:$play_services_version"
     def butterknife_version = "8.7.0"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknife_version"
     implementation "com.jakewharton:butterknife:$butterknife_version"

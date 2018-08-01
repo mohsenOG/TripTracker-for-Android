@@ -5,8 +5,16 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Camera;
 import android.location.Location;
 import android.support.v4.app.ActivityCompat;
+
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -19,6 +27,7 @@ import java.util.List;
 import java.util.Set;
 
 import eu.wonderfulme.triptracker.R;
+import eu.wonderfulme.triptracker.database.LocationData;
 
 public class Utils {
 
@@ -47,6 +56,25 @@ public class Utils {
     static public boolean isLocationPermissionGranted(Context context) {
         return ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    static public PolylineOptions getPolyLine(List<LocationData> data) {
+        PolylineOptions options = new PolylineOptions();
+        options.clickable(false);
+        for (LocationData d : data) {
+            options.add(new LatLng(d.getLatitude(), d.getLongitude()));
+        }
+        return options;
+    }
+
+    static public CameraUpdate getMapCameraBounds(List<LocationData> data) {
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        for (LocationData d : data) {
+            builder.include(new LatLng(d.getLatitude(), d.getLongitude()));
+        }
+        LatLngBounds bounds = builder.build();
+
+        return CameraUpdateFactory.newLatLngBounds(bounds, 50);
     }
 
 }

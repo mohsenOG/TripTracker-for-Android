@@ -1,8 +1,7 @@
 package eu.wonderfulme.triptracker.database;
 
-import java.io.Serializable;
 
-public class LocationHeaderData implements Serializable {
+public class LocationHeaderData {
     private int item_key;
     private String minTimestamp;
 
