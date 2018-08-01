@@ -2,7 +2,6 @@ package eu.wonderfulme.triptracker.ui;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.arch.persistence.db.SimpleSQLiteQuery;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -57,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
     private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION_MAIN_SINGLE = 101;
     private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION_MAIN_TRACK = 102;
     private final String KEY_RECYCLER_VIEW_SAVE_STATE = "KEY_RECYCLER_VIEW_SAVE_STATE";
+    private final String KEY_IS_EVERYTHING_DISABLED_SAVE_STATE = "KEY_IS_EVERYTHING_DISABLED_SAVE_STATE";
+    private final String KEY_TRACKING_SERVICE_SAVE_STATE = "KEY_TRACKING_SERVICE_SAVE_STATE";
     static final int ITEM_REMOVED_REQUEST = 103;
     static final String INTENT_EXTRA_ROUTE_DETAIL = "INTENT_EXTRA_ROUTE_DETAIL";
 
@@ -105,7 +106,28 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
         mAdapter = new RoutesRecyclerViewAdapter(this, new ArrayList<LocationHeaderData>());
         mAdapter.setItemClickListener(this);
         mRecyclerView.setAdapter(mAdapter);
+
         new RecyclerViewUpdateAsyncTask().execute();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(KEY_RECYCLER_VIEW_SAVE_STATE, mRecyclerView.getLayoutManager().onSaveInstanceState());
+        outState.putBoolean(KEY_IS_EVERYTHING_DISABLED_SAVE_STATE, mIsEverythingDisabled);
+        outState.putParcelable(KEY_TRACKING_SERVICE_SAVE_STATE, mTrackingService);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mRecyclerView.getLayoutManager().onRestoreInstanceState(savedInstanceState.getParcelable(KEY_RECYCLER_VIEW_SAVE_STATE));
+        mTrackingService = savedInstanceState.getParcelable(KEY_TRACKING_SERVICE_SAVE_STATE);
+        mIsEverythingDisabled = savedInstanceState.getBoolean(KEY_IS_EVERYTHING_DISABLED_SAVE_STATE);
+        if (mIsEverythingDisabled) {
+            disableEverything();
+            mRecordButton.setText(R.string.btn_main_record_stop);
+        }
     }
 
     @Override
@@ -119,21 +141,6 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
     protected void onStop() {
         super.onStop();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mLocationServiceReceiver);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable(KEY_RECYCLER_VIEW_SAVE_STATE, mRecyclerView.getLayoutManager().onSaveInstanceState());
-
-        //TODO save Instance state
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        mRecyclerView.getLayoutManager().onRestoreInstanceState(savedInstanceState.getParcelable(KEY_RECYCLER_VIEW_SAVE_STATE));
-        //TODO restore state Instance
     }
 
     @Override
@@ -331,6 +338,7 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
         List<String> parkingLocation = UtilsSharedPref.getParkingLocationFromSharedPref(this);
         mSaveParkingButton.setEnabled(parkingLocation == null);
         mRemoveParkingButton.setEnabled(parkingLocation != null);
+        mAdapter.setClickable(true);
 
         mIsEverythingDisabled = false;
     }
@@ -342,13 +350,14 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
                 v.setEnabled(false);
             }
         }
+        mAdapter.setClickable(false);
         mIsEverythingDisabled = true;
     }
 
     @Override
-    public void onItemClick(LocationHeaderData item) {
+    public void onItemClick(LocationHeaderData headerData) {
         Intent routeItemIntent = new Intent(this, DetailActivity.class);
-        routeItemIntent.putExtra(INTENT_EXTRA_ROUTE_DETAIL, (Serializable)item);
+        routeItemIntent.putExtra(INTENT_EXTRA_ROUTE_DETAIL, headerData);
         startActivityForResult(routeItemIntent, ITEM_REMOVED_REQUEST);
     }
 

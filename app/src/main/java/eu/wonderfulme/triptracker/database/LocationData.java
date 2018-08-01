@@ -11,7 +11,9 @@ import eu.wonderfulme.triptracker.R;
 @Entity
 public class LocationData {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
     @NonNull
     private String timestamp;
 
@@ -49,6 +51,10 @@ public class LocationData {
         this.altitude = altitude;
         this.speed = speed;
     }
+
+    public int getId() { return id; }
+
+    public void setId(int id) { this.id = id; }
 
     @NonNull
     public String getTimestamp() {

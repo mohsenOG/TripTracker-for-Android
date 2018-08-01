@@ -1,10 +1,8 @@
 package eu.wonderfulme.triptracker.ui;
 
 import android.content.Context;
-import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,10 +24,12 @@ public class RoutesRecyclerViewAdapter extends RecyclerView.Adapter<RoutesRecycl
     private ItemClickListener mItemClickListener;
     private List<LocationHeaderData> mItems;
     private Context mContext;
+    private boolean mIsClickable;
 
     public RoutesRecyclerViewAdapter(Context context, List<LocationHeaderData> items) {
         this.mItems = items;
         this.mContext = context;
+        this.mIsClickable = true;
     }
 
     @NonNull
@@ -53,6 +53,8 @@ public class RoutesRecyclerViewAdapter extends RecyclerView.Adapter<RoutesRecycl
     void setItemClickListener(ItemClickListener itemClickListener) {
         mItemClickListener = itemClickListener;
     }
+
+    void setClickable(boolean clickable) { mIsClickable = clickable;}
 
     void swapData(List<LocationHeaderData> newData) {
         if (newData == null || newData.size() == 0) {
@@ -79,7 +81,8 @@ public class RoutesRecyclerViewAdapter extends RecyclerView.Adapter<RoutesRecycl
         @Override
         public void onClick(View v) {
             int itemKey = mItem.getItem_key();
-            if(mItemClickListener != null && itemKey != -1 && !mRouteNamesTextView.getText().toString().isEmpty())
+            if(mItemClickListener != null && mIsClickable &&
+                    itemKey != -1 && !mRouteNamesTextView.getText().toString().isEmpty())
                 mItemClickListener.onItemClick(mItem);
         }
 
