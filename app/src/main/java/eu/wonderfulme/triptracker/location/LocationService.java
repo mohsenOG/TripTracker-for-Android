@@ -61,7 +61,7 @@ public class LocationService extends Service implements LocationListener {
             //mLocationRequest.setInterval(mRecordPeriodInSeconds * 1000);
             mLocationRequest.setInterval(0);
             StartRequestLocation();
-
+            //TODO make the notification clickable.
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
                     .setContentTitle(getString(R.string.notification_locationservice_title))
                     .setContentText(getString(R.string.notification_locationservice_content))

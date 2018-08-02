@@ -80,9 +80,24 @@
         app:layout_constraintStart_toEndOf="@id/vertical_gl_0_3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/adView_main_activity"
         android:focusable="true"
-        android:nextFocusUp="@id/btn_main_record" />
+        android:nextFocusDown="@id/adView_main_activity"
+        android:nextFocusLeft="@id/btn_main_save_parking"/>
+
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView_main_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/admob_banner_main_activity"
+        ads:layout_constraintStart_toEndOf="@id/vertical_gl_0_3"
+        ads:layout_constraintEnd_toEndOf="parent"
+        ads:layout_constraintTop_toBottomOf="@id/recyclerView_routes"
+        ads:layout_constraintBottom_toBottomOf="parent"
+        android:focusable="true"
+        android:nextFocusUp="@id/recyclerView_routes"/>
 
 
 </android.support.constraint.ConstraintLayout>

@@ -12,6 +12,7 @@ import eu.wonderfulme.triptracker.database.LocationDbSingleton;
 import eu.wonderfulme.triptracker.tasks.NukeDatabaseWorker;
 import eu.wonderfulme.triptracker.utility.GoogleApiHelper;
 import com.crashlytics.android.Crashlytics;
+import com.google.android.gms.ads.MobileAds;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -38,6 +39,8 @@ public class App extends Application {
         new ItemKeyInitializerAsyncTask().execute();
         // Check if db should be nuked
         nukeDbChecker();
+        // Init admob
+        MobileAds.initialize(mInstance, getString(R.string.admob_app_id));
     }
 
     public static synchronized App getInstance() {
@@ -54,7 +57,6 @@ public class App extends Application {
 
     @SuppressLint("StaticFieldLeak")
     private class ItemKeyInitializerAsyncTask extends AsyncTask<Void, Void, Void> {
-
         @Override
         protected Void doInBackground(Void... voids) {
             int lastItemKey = LocationDbSingleton.getInstance(mInstance).locationDao().getLastItemKey();

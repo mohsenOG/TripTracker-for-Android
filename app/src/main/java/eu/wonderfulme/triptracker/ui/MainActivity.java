@@ -29,6 +29,10 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.common.util.CollectionUtils;
 
 import org.apache.commons.lang3.StringUtils;
@@ -65,13 +69,15 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
     @BindView(R.id.btn_main_remove_parking) protected Button mRemoveParkingButton;
     @BindView(R.id.btn_main_record) protected Button mRecordButton;
     @BindView(R.id.recyclerView_routes) protected RecyclerView mRecyclerView;
-    private RoutesRecyclerViewAdapter mAdapter;
-
     @BindView(R.id.constraintLayout_mainActivity) protected ConstraintLayout mConstraintLayout;
     @BindView(R.id.progressBar_main) protected ProgressBar mProgressBar;
+    @BindView(R.id.adView_main_activity) protected AdView mBannerAdView;
+    private InterstitialAd mInterstitialAd;
+    private RoutesRecyclerViewAdapter mAdapter;
     private BroadcastReceiver mLocationServiceReceiver;
     private boolean mIsEverythingDisabled = false;
     private SearchLocation mTrackingService;
+    private int mOptionMenuId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +85,13 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        // ad request
+        mBannerAdView = findViewById(R.id.adView_main_activity);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mBannerAdView.loadAd(adRequest);
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(getString(R.string.admob_interstitial_option_menu));
+        mInterstitialAd.setAdListener(new MyAdListener());
         // Check the location if it is valid show the restore button.
         List<String> parkingLocation = UtilsSharedPref.getParkingLocationFromSharedPref(this);
         if (!CollectionUtils.isEmpty(parkingLocation)) {
@@ -133,6 +146,8 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
     @Override
     protected void onResume() {
         super.onResume();
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+
         IntentFilter filter = new IntentFilter(ACTION_PARKING_LOCATION_SAVED);
         LocalBroadcastManager.getInstance(this).registerReceiver(mLocationServiceReceiver, filter);
     }
@@ -152,16 +167,14 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_setting) {
-            Intent intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
-            return true;
-        } else if (id == R.id.action_about) {
-            Intent intent = new Intent(this, AboutActivity.class);
-            startActivity(intent);
+        mOptionMenuId = item.getItemId();
+        if (mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        } else {
+            showOption();
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -200,6 +213,16 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
         } else {
             // permission denied. Disable the functionality.
             Snackbar.make(mConstraintLayout, getString(R.string.toast_location_permission_denied), Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    private void showOption() {
+        if (mOptionMenuId == R.id.action_setting) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+        } else if (mOptionMenuId == R.id.action_about) {
+            Intent intent = new Intent(this, AboutActivity.class);
+            startActivity(intent);
         }
     }
 
@@ -391,6 +414,21 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
         protected void onPostExecute(List<LocationHeaderData> locationHeaderData) {
             super.onPostExecute(locationHeaderData);
             mAdapter.swapData(locationHeaderData);
+        }
+    }
+
+    private class MyAdListener extends AdListener {
+        @Override
+        public void onAdClosed() {
+            super.onAdClosed();
+            showOption();
+
+        }
+
+        @Override
+        public void onAdFailedToLoad(int i) {
+            super.onAdFailedToLoad(i);
+            showOption();
         }
     }
 }

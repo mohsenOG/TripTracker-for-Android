@@ -18,6 +18,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -48,17 +52,27 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     @BindView(R.id.btn_detail_export) protected Button mExportButton;
     @BindView(R.id.btn_detail_remove) protected Button mRemoveButton;
     @BindView(R.id.detail_activity_layout) protected ConstraintLayout mConstraintLayout;
+    @BindView(R.id.adView_detail_activity) protected AdView mBannerAdView;
     private int mItemKey;
     private List<LocationData> mLocationData;
     private GoogleMap mMap;
     private Snackbar mSnackBar;
     private SupportMapFragment mMapFragment;
+    private InterstitialAd mInterstitialAd;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
+        // request ad
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mBannerAdView.loadAd(adRequest);
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(getString(R.string.admob_interstitial_detail_export));
+        mInterstitialAd.setAdListener(new MyAdListener());
+
         Intent incomingIntent = getIntent();
         if (incomingIntent == null) {
             throw new RuntimeException(this.toString() + " must receive Route header");
@@ -103,7 +117,21 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+    }
+
     public void onExportClicked(View view) {
+        if (mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        } else {
+         exportCsv();
+        }
+    }
+
+    private void exportCsv() {
         // Check permission
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PERMISSION_GRANTED) {
             // Permission is not granted. ask user.
@@ -112,7 +140,6 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
             //Permission is already granted.
             new ExportAsyncTask(this, mSnackBar, mItemKey).execute();
         }
-
     }
 
     public void onRemoveClicked(View view) {
@@ -168,6 +195,20 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         protected Void doInBackground(Void... voids) {
             mLocationData = LocationDbSingleton.getInstance(DetailActivity.this).locationDao().getDbData(mItemKey);
             return null;
+        }
+    }
+
+    private class MyAdListener extends AdListener {
+        @Override
+        public void onAdClosed() {
+            super.onAdClosed();
+            exportCsv();
+        }
+
+        @Override
+        public void onAdFailedToLoad(int i) {
+            super.onAdFailedToLoad(i);
+            exportCsv();
         }
     }
 }

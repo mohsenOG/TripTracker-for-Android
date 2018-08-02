@@ -23,6 +23,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.common.util.CollectionUtils;
 
 import java.util.List;
@@ -44,6 +46,7 @@ public class LauncherDialog extends Dialog implements View.OnClickListener, Acti
     private ProgressBar mProgressBar;
     private TextView mDetailTextView;
     private AppCompatActivity mParentActivity;
+    private AdView mAdView;
 
     private BroadcastReceiver mLocationServiceBroadcastReceiver;
 
@@ -61,6 +64,10 @@ public class LauncherDialog extends Dialog implements View.OnClickListener, Acti
         setContentView(R.layout.dialog_launcher);
         this.setCanceledOnTouchOutside(false);
 
+        //Init Ad
+        mAdView = findViewById(R.id.adView_launch_dialog);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
         // Init receiver
         mLocationServiceBroadcastReceiver = new BroadcastReceiver() {
             @Override
