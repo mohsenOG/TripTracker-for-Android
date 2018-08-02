@@ -1,12 +1,17 @@
 package eu.wonderfulme.triptracker.ui;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +22,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
+import java.io.Serializable;
 import java.util.List;
 
 import butterknife.BindView;
@@ -28,13 +34,16 @@ import eu.wonderfulme.triptracker.tasks.ExportAsyncTask;
 import eu.wonderfulme.triptracker.tasks.RemoveAsyncTask;
 import eu.wonderfulme.triptracker.utility.Utils;
 
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static eu.wonderfulme.triptracker.ui.MainActivity.INTENT_EXTRA_ITEM_KEY;
 import static eu.wonderfulme.triptracker.ui.MainActivity.INTENT_EXTRA_ROUTE_NAME;
 
 
-public class DetailActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapLoadedCallback{
+public class DetailActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapLoadedCallback {
 
     static final String ACTION_ROUTE_REMOVED = "ACTION_ROUTE_REMOVED";
+    static final String SAVE_STATE_LOCATION_DATA_KEY = "SAVE_STATE_LOCATION_DATA_KEY";
+    private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 103;
 
     @BindView(R.id.btn_detail_export) protected Button mExportButton;
     @BindView(R.id.btn_detail_remove) protected Button mRemoveButton;
@@ -43,6 +52,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     private List<LocationData> mLocationData;
     private GoogleMap mMap;
     private Snackbar mSnackBar;
+    private SupportMapFragment mMapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,25 +67,52 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         setTitle(incomingIntent.getStringExtra(INTENT_EXTRA_ROUTE_NAME));
         mItemKey = incomingIntent.getIntExtra(INTENT_EXTRA_ITEM_KEY, -1);
         mSnackBar = Snackbar.make(mConstraintLayout, "", Snackbar.LENGTH_LONG);
-        new LocationDataQueryAsyncTask().execute();
-        SupportMapFragment mapFragment = (SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_map);
-        mapFragment.getMapAsync(this);
+        mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map);
+        if (savedInstanceState == null) {
+            new LocationDataQueryAsyncTask().execute();
+            mMapFragment.getMapAsync(this);
+        }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        //TODO save state
+        outState.putSerializable(SAVE_STATE_LOCATION_DATA_KEY, (Serializable) mLocationData);
+        mMapFragment.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        //TODO Restore state
+        mLocationData = (List<LocationData>) savedInstanceState.getSerializable(SAVE_STATE_LOCATION_DATA_KEY);
+        mMapFragment.onViewStateRestored(savedInstanceState);
+        mMapFragment.getMapAsync(this);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            switch (requestCode) {
+                case MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE:
+                    new ExportAsyncTask(this, mSnackBar, mItemKey);
+                    break;
+            }
+        } else {
+            Snackbar.make(mConstraintLayout, getString(R.string.snackbar_write_external_storage_permission_denied), Snackbar.LENGTH_LONG).show();
+        }
     }
 
     public void onExportClicked(View view) {
-        new ExportAsyncTask(this, mSnackBar, mItemKey).execute();
+        // Check permission
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PERMISSION_GRANTED) {
+            // Permission is not granted. ask user.
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+        } else {
+            //Permission is already granted.
+            new ExportAsyncTask(this, mSnackBar, mItemKey).execute();
+        }
+
     }
 
     public void onRemoveClicked(View view) {

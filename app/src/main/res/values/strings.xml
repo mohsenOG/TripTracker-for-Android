@@ -42,6 +42,7 @@
     <string name="snackbar_goto_downloads">Downloads</string>
     <string name="snackbar_remove_succeed">Route has been removed successfully.</string>
     <string name="snackbar_record_finished">Recording location finished.</string>
+    <string name="snackbar_write_external_storage_permission_denied">We need to access your device storage to save your file.</string>
     <!-- General -->
     <string name="bulk_route_name" translatable="false">route name temp</string>
     <string name="gps_is_not_on">Your GPS seems to be disabled, do you want to enable it?</string>

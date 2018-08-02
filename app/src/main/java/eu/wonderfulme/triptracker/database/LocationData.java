@@ -6,10 +6,12 @@ import android.arch.persistence.room.PrimaryKey;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import java.io.Serializable;
+
 import eu.wonderfulme.triptracker.R;
 
 @Entity
-public class LocationData {
+public class LocationData implements Serializable{
 
     @PrimaryKey(autoGenerate = true)
     private int id;
