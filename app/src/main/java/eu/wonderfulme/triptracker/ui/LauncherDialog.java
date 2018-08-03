@@ -23,8 +23,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.google.android.gms.common.util.CollectionUtils;
 
 import java.util.List;
@@ -32,25 +30,26 @@ import java.util.List;
 import eu.wonderfulme.triptracker.App;
 import eu.wonderfulme.triptracker.R;
 import eu.wonderfulme.triptracker.location.SearchLocation;
+import eu.wonderfulme.triptracker.utility.Utils;
 import eu.wonderfulme.triptracker.utility.UtilsSharedPref;
 
 import static eu.wonderfulme.triptracker.location.LocationService.ACTION_PARKING_LOCATION_SAVED;
 import static eu.wonderfulme.triptracker.location.SearchLocation.LOCATION_TYPE_SINGLE;
 
-public class LauncherDialog extends Dialog implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback{
+class LauncherDialog extends Dialog implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback{
 
     private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION_LAUNCHER = 100;
-    private Context mContext;
+    private final Context mContext;
     private Button mSaveParkingButton;
     private Button mOpenAppButton;
     private ProgressBar mProgressBar;
     private TextView mDetailTextView;
-    private AppCompatActivity mParentActivity;
+    private final AppCompatActivity mParentActivity;
 
     private BroadcastReceiver mLocationServiceBroadcastReceiver;
 
 
-    public LauncherDialog(@NonNull Context context) {
+    LauncherDialog(@NonNull Context context) {
         super(context);
         mContext = context;
         mParentActivity = (AppCompatActivity) mContext;
@@ -87,6 +86,9 @@ public class LauncherDialog extends Dialog implements View.OnClickListener, Acti
 
         mProgressBar = findViewById(R.id.progressBar_dialog);
         mDetailTextView = findViewById(R.id.tv_dialog_support);
+
+        TextView title = findViewById(R.id.tv_dialog_title);
+        title.setText(Utils.getTimeBaseWelcome(mContext));
     }
 
     @Override

@@ -2,7 +2,6 @@ package eu.wonderfulme.triptracker.ui;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.view.LayoutInflater;
@@ -15,7 +14,7 @@ import eu.wonderfulme.triptracker.R;
 public class SettingsFragment extends PreferenceFragment {
 
     public interface PreferenceFragmentCallback {
-        public void onRecordPeriodChanged(String periodType);
+        void onRecordPeriodChanged(String periodType);
     }
 
     private PreferenceFragmentCallback mPreferenceFragmentCallback;

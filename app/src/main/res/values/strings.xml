@@ -32,11 +32,10 @@
     <string name="pref_settings_record_type_walk">Walk</string>
     <string name="pref_settings_record_type_custom">custom</string>
     <!-- Notifications -->
-    <string name="notification_locationservice_title">Recording Location</string>
-    <string name="notification_locationservice_content">Please remove this notification only from the app itself!</string>
+    <string name="notification_location_service_title">Recording Location</string>
+    <string name="notification_location_service_content">Please remove this notification only from the app itself!</string>
     <!-- Launcher dialog strings -->
-    <string name="tv_launcher_dialog_title">What do you want to do?</string>
-    <string name="tv_launcher_dialog_support_text">You can choose between saving your parking location of opening the Trip Tracker.</string>
+    <string name="tv_launcher_dialog_support_text">You can save your parking or open Trip Tracker.</string>
     <string name="btn_launcher_dialog_open_app">OPEN APP</string>
     <!-- Toasts/SnackBars -->
     <string name="toast_parking_saved">Location saved successfully.</string>
@@ -44,13 +43,13 @@
     <string name="toast_location_permission_denied">Our app main functionality needs location. Please try again and accept the location access.</string>
     <string name="toast_gps_denied">Our app main functionality needs location. Please turn your gps on and try again.</string>
     <string name="toast_google_client_no_connection">Our app main functionality needs Google Services. Please login to you google account.</string>
-    <string name="snackbar_put_app_in_background">Now you can put app in background!</string>
-    <string name="snackbar_export_csv_successful">Saved!</string>
-    <string name="snackbar_export_csv_failed">Export failed. Please try again.</string>
-    <string name="snackbar_goto_downloads">Downloads</string>
-    <string name="snackbar_remove_succeed">Route has been removed successfully.</string>
-    <string name="snackbar_record_finished">Recording location finished.</string>
-    <string name="snackbar_write_external_storage_permission_denied">We need to access your device storage to save your file.</string>
+    <string name="snackBar_put_app_in_background">Now you can put app in background!</string>
+    <string name="snackBar_export_csv_successful">Saved!</string>
+    <string name="snackBar_export_csv_failed">Export failed. Please try again.</string>
+    <string name="snackBar_goto_downloads">Downloads</string>
+    <string name="snackBar_remove_succeed">Route has been removed successfully.</string>
+    <string name="snackBar_record_finished">Recording location finished.</string>
+    <string name="snackBar_write_external_storage_permission_denied">We need to access your device storage to save your file.</string>
     <!-- General -->
     <string name="bulk_route_name" translatable="false">route name temp</string>
     <string name="gps_is_not_on">Your GPS seems to be disabled, do you want to enable it?</string>
@@ -59,6 +58,10 @@
     <string name="apply">APPLY</string>
     <string name="widget_no_route_available">There is no route available.</string>
     <string name="select_period_hint">Please choose a record period (seconds)</string>
+    <string name="welcome_morning">Good Morning</string>
+    <string name="welcome_afternoon">Good Afternoon</string>
+    <string name="welcome_night">Good Night</string>
+    <string name="welcome_evening">Good Evening</string>
     <!-- Alert Dialogs -->
     <string name="alert_remove_route_title">Remove Route</string>
     <string name="alert_remove_route_msg">Are you sure?</string>

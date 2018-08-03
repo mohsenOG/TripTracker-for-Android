@@ -3,7 +3,6 @@ package eu.wonderfulme.triptracker.location;
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -11,7 +10,6 @@ import android.location.Location;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.google.android.gms.location.LocationCallback;
@@ -21,7 +19,6 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
 import eu.wonderfulme.triptracker.R;
-import eu.wonderfulme.triptracker.ui.MainActivity;
 import eu.wonderfulme.triptracker.utility.Utils;
 import eu.wonderfulme.triptracker.database.LocationData;
 import eu.wonderfulme.triptracker.tasks.InsertLocationAsyncTask;
@@ -60,13 +57,12 @@ public class LocationService extends Service implements LocationListener {
         // Check how the service should implement.
         if (mLocationRequestType == LOCATION_TYPE_TRACK) {
             mRecordPeriodInSeconds = UtilsSharedPref.getRecordPeriodFromSharedPref(this);
-            //TODO Correct setIntervals
-            //mLocationRequest.setInterval(mRecordPeriodInSeconds * 1000);
+            mLocationRequest.setInterval(mRecordPeriodInSeconds * 1000);
             mLocationRequest.setInterval(0);
             StartRequestLocation();
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
-                    .setContentTitle(getString(R.string.notification_locationservice_title))
-                    .setContentText(getString(R.string.notification_locationservice_content))
+                    .setContentTitle(getString(R.string.notification_location_service_title))
+                    .setContentText(getString(R.string.notification_location_service_content))
                     .setSmallIcon(R.drawable.ic_notification)
                     .setColor(getResources().getColor(R.color.colorAccent));
             createNotificationChannel();
@@ -98,7 +94,7 @@ public class LocationService extends Service implements LocationListener {
 
 
     private class MyLocationCallback extends LocationCallback {
-        private Context mContext;
+        private final Context mContext;
 
         MyLocationCallback(Context context) {
             this.mContext = context;
@@ -120,12 +116,11 @@ public class LocationService extends Service implements LocationListener {
         }
 
         private void saveParkingLocation(Location location) {
-            //TODO Correct the accuracy
-            //if (location.hasAccuracy() && location.getAccuracy() <= PARKING_LOCATION_ACCURACY) {
+            if (location.hasAccuracy() && location.getAccuracy() <= PARKING_LOCATION_ACCURACY) {
                 UtilsSharedPref.setParkingLocationToSharedPref(mContext, location);
                 broadcastParkingSaved();
                 stopSelf();
-            //}
+            }
         }
 
         private void saveLocationOnDatabase(Location location) {

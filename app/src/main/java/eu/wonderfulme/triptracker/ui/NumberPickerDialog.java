@@ -11,9 +11,9 @@ import android.widget.NumberPicker;
 import eu.wonderfulme.triptracker.R;
 import eu.wonderfulme.triptracker.utility.UtilsSharedPref;
 
-public class NumberPickerDialog extends Dialog {
+class NumberPickerDialog extends Dialog {
 
-    private Context mContext;
+    private final Context mContext;
     private NumberPicker mNumberPicker;
     private Button mApplyButton;
     private int mMax;
@@ -36,7 +36,7 @@ public class NumberPickerDialog extends Dialog {
         });
     }
 
-    public NumberPickerDialog(@NonNull Context context, int min, int max) {
+    NumberPickerDialog(@NonNull Context context, int min, int max) {
         super(context);
         mContext = context;
         mMin = min;

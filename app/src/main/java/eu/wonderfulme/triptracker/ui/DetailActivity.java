@@ -46,7 +46,7 @@ import static eu.wonderfulme.triptracker.ui.MainActivity.INTENT_EXTRA_ROUTE_NAME
 public class DetailActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapLoadedCallback {
 
     static final String ACTION_ROUTE_REMOVED = "ACTION_ROUTE_REMOVED";
-    static final String SAVE_STATE_LOCATION_DATA_KEY = "SAVE_STATE_LOCATION_DATA_KEY";
+    private static final String SAVE_STATE_LOCATION_DATA_KEY = "SAVE_STATE_LOCATION_DATA_KEY";
     private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 103;
 
     @BindView(R.id.btn_detail_export) protected Button mExportButton;
@@ -98,6 +98,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+        //noinspection unchecked
         mLocationData = (List<LocationData>) savedInstanceState.getSerializable(SAVE_STATE_LOCATION_DATA_KEY);
         mMapFragment.onViewStateRestored(savedInstanceState);
         mMapFragment.getMapAsync(this);
@@ -113,7 +114,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
                     break;
             }
         } else {
-            Snackbar.make(mConstraintLayout, getString(R.string.snackbar_write_external_storage_permission_denied), Snackbar.LENGTH_LONG).show();
+            Snackbar.make(mConstraintLayout, getString(R.string.snackBar_write_external_storage_permission_denied), Snackbar.LENGTH_LONG).show();
         }
     }
 

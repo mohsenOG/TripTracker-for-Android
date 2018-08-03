@@ -10,7 +10,7 @@ import eu.wonderfulme.triptracker.database.LocationDbSingleton;
 public class InsertLocationAsyncTask extends AsyncTask<LocationData, Void, Void> {
 
     @SuppressLint("StaticFieldLeak")
-    private Context mContext;
+    private final Context mContext;
 
     public InsertLocationAsyncTask(Context context) {
         this.mContext = context;

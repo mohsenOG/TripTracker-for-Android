@@ -2,8 +2,8 @@ package eu.wonderfulme.triptracker.database;
 
 
 public class LocationHeaderData {
-    private int item_key;
-    private String minTimestamp;
+    private final int item_key;
+    private final String minTimestamp;
 
     public LocationHeaderData(int item_key, String minTimestamp) {
         this.item_key = item_key;

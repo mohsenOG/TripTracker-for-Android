@@ -11,14 +11,13 @@ import eu.wonderfulme.triptracker.database.LocationDbSingleton;
 public class RemoveAsyncTask extends AsyncTask<Void, Void, Void> {
 
     @SuppressLint("StaticFieldLeak")
-    private Context mContext;
-    private int mItemKey;
-    private boolean isSuccessful = false;
-    private Snackbar mSnackbar;
+    private final Context mContext;
+    private final int mItemKey;
+    private Snackbar mSnackBar;
 
     public RemoveAsyncTask(Context context, Snackbar snackbar, int itemKey) {
         this.mContext = context;
-        this.mSnackbar = snackbar;
+        this.mSnackBar = snackbar;
         this.mItemKey = itemKey;
     }
 
@@ -32,7 +31,7 @@ public class RemoveAsyncTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        mSnackbar.setText(mContext.getResources().getString(R.string.snackbar_remove_succeed))
+        mSnackBar.setText(mContext.getResources().getString(R.string.snackBar_remove_succeed))
                 .setDuration(Snackbar.LENGTH_LONG)
                 .show();
     }

@@ -21,7 +21,7 @@ public class GoogleApiHelper implements GoogleApiClient.ConnectionCallbacks, Goo
         void onConnected(Bundle bundle);
     }
 
-    private Context mContext;
+    private final Context mContext;
     private GoogleApiClient mGoogleApiClient;
     private ConnectionListener mConnectionListener;
     private Bundle mConnectionBundle;
@@ -45,7 +45,7 @@ public class GoogleApiHelper implements GoogleApiClient.ConnectionCallbacks, Goo
         }
     }
 
-    public void connect() {
+    private void connect() {
         if (mGoogleApiClient != null) {
             mGoogleApiClient.connect();
         }

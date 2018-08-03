@@ -3,28 +3,20 @@ package eu.wonderfulme.triptracker.utility;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Camera;
-import android.location.Location;
 import android.support.v4.app.ActivityCompat;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import eu.wonderfulme.triptracker.R;
 import eu.wonderfulme.triptracker.database.LocationData;
@@ -75,6 +67,20 @@ public class Utils {
         LatLngBounds bounds = builder.build();
 
         return CameraUpdateFactory.newLatLngBounds(bounds, 50);
+    }
+
+    static public String getTimeBaseWelcome(Context context) {
+        Calendar c = Calendar.getInstance();
+        int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
+        if(timeOfDay >= 0 && timeOfDay < 12){
+           return context.getString(R.string.welcome_morning);
+        } else if(timeOfDay >= 12 && timeOfDay < 16){
+            return context.getString(R.string.welcome_afternoon);
+        } else if(timeOfDay >= 16 && timeOfDay < 21){
+            return context.getString(R.string.welcome_evening);
+        } else {
+            return context.getString(R.string.welcome_night);
+        }
     }
 
 }

@@ -21,15 +21,15 @@ import eu.wonderfulme.triptracker.database.LocationDbSingleton;
 public class ExportAsyncTask extends AsyncTask<Void, Void, Void> {
 
     @SuppressLint("StaticFieldLeak")
-    private Context mContext;
+    private final Context mContext;
     private int mItemKey;
     private boolean isSuccessful = false;
-    private Snackbar mSnackbar;
+    private Snackbar mSnackBar;
     private String mFilename;
 
     public ExportAsyncTask(Context context, Snackbar snackbar, int itemKey) {
         this.mContext = context;
-        this.mSnackbar = snackbar;
+        this.mSnackBar = snackbar;
         this.mItemKey = itemKey;
     }
 
@@ -66,12 +66,12 @@ public class ExportAsyncTask extends AsyncTask<Void, Void, Void> {
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
         if (isSuccessful) {
-            mSnackbar.setText(mContext.getResources().getString(R.string.snackbar_export_csv_successful) + " " + mFilename)
+            mSnackBar.setText(mContext.getResources().getString(R.string.snackBar_export_csv_successful) + " " + mFilename)
                     .setDuration(Snackbar.LENGTH_LONG)
-                    .setAction(R.string.snackbar_goto_downloads, new SnackbarOnClickListener(mContext, mSnackbar, SnackbarOnClickListener.SnackbarActionType.GOTO_DOWNLOADS))
+                    .setAction(R.string.snackBar_goto_downloads, new SnackBarOnClickListener(mContext, mSnackBar))
                     .show();
         } else {
-            mSnackbar.setText(R.string.snackbar_export_csv_failed)
+            mSnackBar.setText(R.string.snackBar_export_csv_failed)
                     .setDuration(Snackbar.LENGTH_LONG)
                     .show();
         }

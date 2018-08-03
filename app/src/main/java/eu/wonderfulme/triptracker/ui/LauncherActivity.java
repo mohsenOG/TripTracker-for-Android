@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 
 import eu.wonderfulme.triptracker.App;
 import eu.wonderfulme.triptracker.utility.GoogleApiHelper;

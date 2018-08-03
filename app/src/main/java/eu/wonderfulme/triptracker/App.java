@@ -2,22 +2,18 @@ package eu.wonderfulme.triptracker;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
-import android.location.Location;
 import android.os.AsyncTask;
 
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
-import eu.wonderfulme.triptracker.database.LocationData;
 import eu.wonderfulme.triptracker.database.LocationDbSingleton;
 import eu.wonderfulme.triptracker.tasks.NukeDatabaseWorker;
 import eu.wonderfulme.triptracker.utility.GoogleApiHelper;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.ads.MobileAds;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import eu.wonderfulme.triptracker.utility.Utils;
 import eu.wonderfulme.triptracker.utility.UtilsSharedPref;
 import io.fabric.sdk.android.Fabric;
 
@@ -32,6 +28,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        // Adding fabric crachlytics
         Fabric.with(this, new Crashlytics());
         mInstance = this;
         mGoogleApiHelper = new GoogleApiHelper(mInstance);

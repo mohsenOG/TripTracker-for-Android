@@ -22,8 +22,8 @@ public class RoutesRecyclerViewAdapter extends RecyclerView.Adapter<RoutesRecycl
     }
 
     private ItemClickListener mItemClickListener;
-    private List<LocationHeaderData> mItems;
-    private Context mContext;
+    private final List<LocationHeaderData> mItems;
+    private final Context mContext;
     private boolean mIsClickable;
 
     public RoutesRecyclerViewAdapter(Context context, List<LocationHeaderData> items) {

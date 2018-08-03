@@ -1,10 +1,8 @@
 package eu.wonderfulme.triptracker.database;
 
-import android.arch.persistence.db.SupportSQLiteQuery;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
-import android.arch.persistence.room.RawQuery;
 
 import java.util.List;
 

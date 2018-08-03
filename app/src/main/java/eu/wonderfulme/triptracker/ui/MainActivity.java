@@ -48,7 +48,6 @@ import eu.wonderfulme.triptracker.R;
 import eu.wonderfulme.triptracker.database.LocationDbSingleton;
 import eu.wonderfulme.triptracker.database.LocationHeaderData;
 import eu.wonderfulme.triptracker.location.SearchLocation;
-import eu.wonderfulme.triptracker.tasks.RemoveAsyncTask;
 import eu.wonderfulme.triptracker.utility.UtilsSharedPref;
 
 import static eu.wonderfulme.triptracker.location.LocationService.ACTION_PARKING_LOCATION_SAVED;
@@ -63,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
     private final String KEY_RECYCLER_VIEW_SAVE_STATE = "KEY_RECYCLER_VIEW_SAVE_STATE";
     private final String KEY_IS_EVERYTHING_DISABLED_SAVE_STATE = "KEY_IS_EVERYTHING_DISABLED_SAVE_STATE";
     private final String KEY_TRACKING_SERVICE_SAVE_STATE = "KEY_TRACKING_SERVICE_SAVE_STATE";
-    static final int ITEM_REMOVED_REQUEST = 103;
+    private static final int ITEM_REMOVED_REQUEST = 103;
     static final String INTENT_EXTRA_ITEM_KEY = "INTENT_EXTRA_ITEM_KEY";
     static final String INTENT_EXTRA_ROUTE_NAME = "INTENT_EXTRA_ROUTE_NAME";
 
@@ -241,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
                     disableEverything();
                     mRecordButton.setText(R.string.btn_main_record_stop);
                     checkGPSAndStartTrackingService();
-                    Snackbar.make(mConstraintLayout, getString(R.string.snackbar_put_app_in_background), Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(mConstraintLayout, getString(R.string.snackBar_put_app_in_background), Snackbar.LENGTH_LONG).show();
                     break;
                 default:
                     break;
@@ -291,14 +290,14 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
                 disableEverything();
                 mRecordButton.setText(R.string.btn_main_record_stop);
                 checkGPSAndStartTrackingService();
-                Snackbar.make(mConstraintLayout, getString(R.string.snackbar_put_app_in_background), Snackbar.LENGTH_LONG).show();
+                Snackbar.make(mConstraintLayout, getString(R.string.snackBar_put_app_in_background), Snackbar.LENGTH_LONG).show();
             }
         } else { // if stop record is clicked.
             mTrackingService.stopService();
             mRecordButton.setText(getString(R.string.btn_main_record_start));
             enableEverything();
             new RecyclerViewUpdateAsyncTask().execute();
-            Snackbar.make(mConstraintLayout, getString(R.string.snackbar_record_finished), Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(mConstraintLayout, getString(R.string.snackBar_record_finished), Snackbar.LENGTH_SHORT).show();
         }
     }
 

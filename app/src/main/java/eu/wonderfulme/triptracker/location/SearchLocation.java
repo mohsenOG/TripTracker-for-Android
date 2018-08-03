@@ -6,9 +6,6 @@ import android.location.LocationManager;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-
-import java.io.Serializable;
-
 import eu.wonderfulme.triptracker.utility.UtilsSharedPref;
 
 import static eu.wonderfulme.triptracker.location.LocationService.INTENT_EXTRA_LOCATION_REQUEST_TYPE;
@@ -19,8 +16,8 @@ public class SearchLocation implements Parcelable {
     public static final int LOCATION_TYPE_TRACK = 1;
 
     private Context mContext;
-    private Intent mServiceIntent;
-    private int mRequestType;
+    private final Intent mServiceIntent;
+    private final int mRequestType;
 
     public SearchLocation(Context context, int requestType) {
         this.mContext = context;

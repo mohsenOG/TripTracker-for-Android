@@ -49,9 +49,9 @@ dependencies {
     implementation "com.google.android.gms:play-services-location:$play_services_version"
     implementation "com.google.android.gms:play-services-maps:$play_services_version"
     implementation "com.google.android.gms:play-services-ads:$play_services_version"
-    def butterknife_version = "8.7.0"
-    annotationProcessor "com.jakewharton:butterknife-compiler:$butterknife_version"
-    implementation "com.jakewharton:butterknife:$butterknife_version"
+    def butterKnife_version = "8.7.0"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$butterKnife_version"
+    implementation "com.jakewharton:butterknife:$butterKnife_version"
 
     implementation 'com.opencsv:opencsv:3.9'
 
