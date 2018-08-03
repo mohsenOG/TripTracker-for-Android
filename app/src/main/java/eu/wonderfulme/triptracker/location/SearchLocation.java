@@ -42,12 +42,16 @@ public class SearchLocation implements Parcelable {
         if (mRequestType == LOCATION_TYPE_TRACK) {
             int lastItemKey = UtilsSharedPref.getLastItemKeyFromSharedPref(mContext);
             UtilsSharedPref.setItemKeyToSharedPref(mContext, lastItemKey + 1);
+            UtilsSharedPref.setWidgetServiceChecker(mContext, true);
+        } else {
+            UtilsSharedPref.setWidgetServiceChecker(mContext, false);
         }
         mContext.startService(mServiceIntent);
     }
 
     public void stopService() {
-            mContext.stopService(mServiceIntent);
+        UtilsSharedPref.setWidgetServiceChecker(mContext, false);
+        mContext.stopService(mServiceIntent);
     }
 
     @Override

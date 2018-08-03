@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
@@ -47,6 +48,7 @@ import eu.wonderfulme.triptracker.R;
 import eu.wonderfulme.triptracker.database.LocationDbSingleton;
 import eu.wonderfulme.triptracker.database.LocationHeaderData;
 import eu.wonderfulme.triptracker.location.SearchLocation;
+import eu.wonderfulme.triptracker.tasks.RemoveAsyncTask;
 import eu.wonderfulme.triptracker.utility.UtilsSharedPref;
 
 import static eu.wonderfulme.triptracker.location.LocationService.ACTION_PARKING_LOCATION_SAVED;
@@ -159,6 +161,41 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
     }
 
     @Override
+    public void onBackPressed() {
+        if (mRecordButton.getText().toString().equals(getString(R.string.btn_main_record_stop))) {
+            // Ask user if really want to quit.
+            AlertDialog.Builder builder;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+            } else {
+                builder = new AlertDialog.Builder(this);
+            }
+            builder.setTitle(getString(R.string.alert_ask_quit))
+                    .setMessage(getString(R.string.alert_ask_quit_msg))
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // continue with quit.
+                            mTrackingService.stopService();
+                            finish();
+
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // do nothing
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setCancelable(true)
+                    .show();
+
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.settings_menu, menu);
@@ -174,7 +211,6 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
             showOption();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -414,6 +450,8 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
         protected void onPostExecute(List<LocationHeaderData> locationHeaderData) {
             super.onPostExecute(locationHeaderData);
             mAdapter.swapData(locationHeaderData);
+            //Update shared pref for widget.
+            UtilsSharedPref.setWidgetRouteList(MainActivity.this, locationHeaderData);
         }
     }
 

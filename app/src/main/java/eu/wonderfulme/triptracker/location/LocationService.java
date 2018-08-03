@@ -3,6 +3,7 @@ package eu.wonderfulme.triptracker.location;
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.location.Location;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.google.android.gms.location.LocationCallback;
@@ -19,6 +21,7 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
 import eu.wonderfulme.triptracker.R;
+import eu.wonderfulme.triptracker.ui.MainActivity;
 import eu.wonderfulme.triptracker.utility.Utils;
 import eu.wonderfulme.triptracker.database.LocationData;
 import eu.wonderfulme.triptracker.tasks.InsertLocationAsyncTask;
@@ -61,7 +64,6 @@ public class LocationService extends Service implements LocationListener {
             //mLocationRequest.setInterval(mRecordPeriodInSeconds * 1000);
             mLocationRequest.setInterval(0);
             StartRequestLocation();
-            //TODO make the notification clickable.
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
                     .setContentTitle(getString(R.string.notification_locationservice_title))
                     .setContentText(getString(R.string.notification_locationservice_content))

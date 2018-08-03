@@ -46,7 +46,6 @@ public class LauncherDialog extends Dialog implements View.OnClickListener, Acti
     private ProgressBar mProgressBar;
     private TextView mDetailTextView;
     private AppCompatActivity mParentActivity;
-    private AdView mAdView;
 
     private BroadcastReceiver mLocationServiceBroadcastReceiver;
 
@@ -63,11 +62,6 @@ public class LauncherDialog extends Dialog implements View.OnClickListener, Acti
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dialog_launcher);
         this.setCanceledOnTouchOutside(false);
-
-        //Init Ad
-        mAdView = findViewById(R.id.adView_launch_dialog);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
         // Init receiver
         mLocationServiceBroadcastReceiver = new BroadcastReceiver() {
             @Override

@@ -29,7 +29,6 @@
         android:nextFocusUp="@id/tv_dialog_title"
         android:nextFocusDown="@id/btn_launcher_dialog_save_parking" />
 
-
     <ProgressBar
         android:id="@+id/progressBar_dialog"
         style="?android:attr/progressBarStyle"
@@ -68,13 +67,5 @@
             android:nextFocusLeft="@id/btn_launcher_dialog_save_parking"/>
 
     </LinearLayout>
-
-    <com.google.android.gms.ads.AdView
-        xmlns:ads="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/adView_launch_dialog"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        ads:adSize="SMART_BANNER"
-        ads:adUnitId="@string/admob_banner_launcher_dialog"/>
 
 </LinearLayout>

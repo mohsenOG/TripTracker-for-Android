@@ -46,7 +46,8 @@
         <!-- Settings Activity -->
         <activity
             android:name=".ui.SettingsActivity"
-            android:parentActivityName=".ui.MainActivity">
+            android:parentActivityName=".ui.MainActivity"
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.SettingsActivity" />
@@ -69,6 +70,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.AboutActivity" />
         </activity>
+        <!-- App Widget -->
+        <receiver android:name=".ui.TripTrackerWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="ACTION_ROUTES_CHANGED"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info" />
+        </receiver>
     </application>
 
 </manifest>

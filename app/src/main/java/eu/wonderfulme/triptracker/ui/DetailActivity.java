@@ -149,8 +149,8 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         } else {
             builder = new AlertDialog.Builder(this);
         }
-        builder.setTitle(getString(R.string.remove_route))
-                .setMessage(getString(R.string.remove_route_msg))
+        builder.setTitle(getString(R.string.alert_remove_route_title))
+                .setMessage(getString(R.string.alert_remove_route_msg))
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // continue with delete

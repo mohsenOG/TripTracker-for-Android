@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 import eu.wonderfulme.triptracker.R;
+import eu.wonderfulme.triptracker.database.LocationHeaderData;
 
 public class UtilsSharedPref {
 
@@ -56,6 +57,44 @@ public class UtilsSharedPref {
     static public boolean getNukeDbChecker(Context context) {
         SharedPreferences sharedPreferences = UtilsSharedPref.getSharedPref(context);
         return sharedPreferences.getBoolean(context.getString(R.string.preference_nuke_db_checker), false);
+    }
+
+    static public void setWidgetServiceChecker(Context context, boolean isRunning) {
+        SharedPreferences sharedPreferences = UtilsSharedPref.getSharedPref(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(context.getString(R.string.preference_widget_service_status), isRunning);
+        editor.apply();
+    }
+
+    static public boolean getWidgetServiceChecker(Context context) {
+        SharedPreferences sharedPreferences = UtilsSharedPref.getSharedPref(context);
+        return sharedPreferences.getBoolean(context.getString(R.string.preference_widget_service_status), true);
+    }
+
+    static public void setWidgetRouteList(Context context, List<LocationHeaderData> routes) {
+        List<String> routesList = new ArrayList<>();
+        for (LocationHeaderData headerData : routes) {
+            routesList.add(headerData.getMinTimestamp());
+        }
+        Set<String> targetSet = new HashSet<>(routesList);
+        SharedPreferences sharedPreferences = UtilsSharedPref.getSharedPref(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putStringSet(context.getString(R.string.preference_widget_route_list), targetSet);
+        editor.apply();
+    }
+
+    static public String getWidgetRoutes(Context context) {
+        SharedPreferences sharedPreferences = UtilsSharedPref.getSharedPref(context);
+        Set<String> retSet = sharedPreferences.getStringSet(context.getString(R.string.preference_widget_route_list), null);
+        if (retSet != null) {
+            StringBuilder builder = new StringBuilder();
+            for (String eachSet : retSet) {
+                builder.append(eachSet).append("\n");
+            }
+            return builder.toString();
+        } else {
+            return null;
+        }
     }
 
     static public void setParkingLocationToSharedPref(Context context, Location location) {

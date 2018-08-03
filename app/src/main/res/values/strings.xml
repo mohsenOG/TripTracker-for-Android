@@ -3,7 +3,6 @@
 
     <!-- Admob -->
     <string name="admob_app_id" translatable="false">ca-app-pub-3940256099942544~3347511713</string>
-    <string name="admob_banner_launcher_dialog" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
     <string name="admob_banner_main_activity" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
     <string name="admob_banner_detail_activity" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
     <string name="admob_interstitial_option_menu" translatable="false">ca-app-pub-3940256099942544/1033173712</string>
@@ -22,6 +21,8 @@
     <string name="preference_item_key" translatable="false">preference_item_key</string>
     <string name="preference_parking_location" translatable="false">preference_parking_location</string>
     <string name="preference_nuke_db_checker" translatable="false">preference_nuke_db_checker</string>
+    <string name="preference_widget_service_status" translatable="false">preference_widget_service_status</string>
+    <string name="preference_widget_route_list" translatable="false">preference_widget_route_list</string>
 
     <string name="pref_settings_record_type_title">Record type</string>
     <string name="pref_settings_record_type_key" translatable="false">preference_settings_record_type_key</string>
@@ -56,9 +57,13 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="apply">APPLY</string>
+    <string name="widget_no_route_available">There is no route available.</string>
     <string name="select_period_hint">Please choose a record period (seconds)</string>
-    <string name="remove_route">Remove Route</string>
-    <string name="remove_route_msg">Are you sure?</string>
+    <!-- Alert Dialogs -->
+    <string name="alert_remove_route_title">Remove Route</string>
+    <string name="alert_remove_route_msg">Are you sure?</string>
+    <string name="alert_ask_quit">Quit?</string>
+    <string name="alert_ask_quit_msg">Trip Tracker will stop recording your location!</string>
     <!-- Buttons -->
     <string name="btn_save_parking">SAVE PARKING</string>
     <string name="btn_restore_parking">SHOW PARKING</string>
