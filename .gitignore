@@ -25,4 +25,4 @@ proguard/
 *.jks
 
 fabric.properties
-
+installMe.*

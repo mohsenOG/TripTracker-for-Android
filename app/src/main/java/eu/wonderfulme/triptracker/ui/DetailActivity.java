@@ -95,10 +95,10 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         mMapFragment.onSaveInstanceState(outState);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        //noinspection unchecked
         mLocationData = (List<LocationData>) savedInstanceState.getSerializable(SAVE_STATE_LOCATION_DATA_KEY);
         mMapFragment.onViewStateRestored(savedInstanceState);
         mMapFragment.getMapAsync(this);

@@ -11,25 +11,37 @@ buildscript {
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
-repositories {
-    maven { url 'https://maven.fabric.io/public' }
-}
-
-
 android {
     compileSdkVersion 27
+    lintOptions {
+        checkReleaseBuilds true //TODO There is an weird list error in using deprecated APIs in LocationService.
+        abortOnError false
+    }
     defaultConfig {
         applicationId "eu.wonderfulme.triptracker"
         minSdkVersion 19
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
-        resValue("string", "GOOGLE_MAPS_API_KEY", GOOGLE_MAPS_API_KEY)
+        resValue("string", "GOOGLE_MAPS_API_KEY", GOOGLE_MAPS_API_KEY) // Add api key to gradle.properties.
+    }
+    signingConfigs {
+        release {
+            if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) { // Save Keystore file under App Module
+                storeFile file(MYAPP_RELEASE_STORE_FILE) // Add needed info to gradle.properties.
+                storePassword MYAPP_RELEASE_STORE_PASSWORD
+                keyAlias MYAPP_RELEASE_KEY_ALIAS
+                keyPassword MYAPP_RELEASE_KEY_PASSWORD
+            } else {
+                throw new GradleException("KeyStore is not available")
+            }
+        }
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 }
