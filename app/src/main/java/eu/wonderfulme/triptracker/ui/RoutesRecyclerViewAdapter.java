@@ -47,7 +47,10 @@ public class RoutesRecyclerViewAdapter extends RecyclerView.Adapter<RoutesRecycl
 
     @Override
     public int getItemCount() {
-        return mItems.size();
+        if (mItems != null)
+            return mItems.size();
+        else
+            return 0;
     }
 
     void setItemClickListener(ItemClickListener itemClickListener) {

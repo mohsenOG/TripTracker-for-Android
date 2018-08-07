@@ -9,7 +9,7 @@ public class LocationDbSingleton {
 
     public static LocationDatabase getInstance(Context context) {
         if (instance == null) {
-            instance = Room.databaseBuilder(context, LocationDatabase.class, "locationDb")
+            instance = Room.databaseBuilder(context.getApplicationContext(), LocationDatabase.class, "locationDb")
                     .fallbackToDestructiveMigration()
                     .build();
         }

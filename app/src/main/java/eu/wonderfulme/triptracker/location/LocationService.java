@@ -18,10 +18,11 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
+import eu.wonderfulme.triptracker.App;
 import eu.wonderfulme.triptracker.R;
+import eu.wonderfulme.triptracker.database.LocationRepository;
 import eu.wonderfulme.triptracker.utility.Utils;
 import eu.wonderfulme.triptracker.database.LocationData;
-import eu.wonderfulme.triptracker.tasks.InsertLocationAsyncTask;
 import eu.wonderfulme.triptracker.utility.UtilsSharedPref;
 
 import static eu.wonderfulme.triptracker.location.SearchLocation.LOCATION_TYPE_TRACK;
@@ -40,10 +41,12 @@ public class LocationService extends Service implements LocationListener {
     private MyLocationCallback mLocationCallback;
     private long mRecordPeriodInSeconds;
     private int mLocationRequestType;
+    private LocationRepository mLocationRepos;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        mLocationRepos = new LocationRepository(App.getInstance());
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationCallback = new MyLocationCallback(this);
@@ -139,7 +142,7 @@ public class LocationService extends Service implements LocationListener {
             if (itemKey == -100)
                 return;
             LocationData dbData = new LocationData(timestamp, itemKey, latitude, longitude, altitude, speed);
-            new InsertLocationAsyncTask(mContext).execute(dbData);
+            mLocationRepos.insert(dbData);
         }
     }
 

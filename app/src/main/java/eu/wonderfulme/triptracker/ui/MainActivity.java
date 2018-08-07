@@ -1,7 +1,8 @@
 package eu.wonderfulme.triptracker.ui;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,9 +10,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -45,10 +46,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import eu.wonderfulme.triptracker.App;
 import eu.wonderfulme.triptracker.R;
-import eu.wonderfulme.triptracker.database.LocationDbSingleton;
 import eu.wonderfulme.triptracker.database.LocationHeaderData;
 import eu.wonderfulme.triptracker.location.SearchLocation;
 import eu.wonderfulme.triptracker.utility.UtilsSharedPref;
+import eu.wonderfulme.triptracker.viewmodel.LocationDataViewModel;
 
 import static eu.wonderfulme.triptracker.location.LocationService.ACTION_PARKING_LOCATION_SAVED;
 import static eu.wonderfulme.triptracker.location.SearchLocation.LOCATION_TYPE_SINGLE;
@@ -62,7 +63,6 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
     private final String KEY_RECYCLER_VIEW_SAVE_STATE = "KEY_RECYCLER_VIEW_SAVE_STATE";
     private final String KEY_IS_EVERYTHING_DISABLED_SAVE_STATE = "KEY_IS_EVERYTHING_DISABLED_SAVE_STATE";
     private final String KEY_TRACKING_SERVICE_SAVE_STATE = "KEY_TRACKING_SERVICE_SAVE_STATE";
-    private static final int ITEM_REMOVED_REQUEST = 103;
     static final String INTENT_EXTRA_ITEM_KEY = "INTENT_EXTRA_ITEM_KEY";
     static final String INTENT_EXTRA_ROUTE_NAME = "INTENT_EXTRA_ROUTE_NAME";
 
@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
     private boolean mIsEverythingDisabled = false;
     private SearchLocation mTrackingService;
     private int mOptionMenuId;
+    private LocationDataViewModel mLocationViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +122,13 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
         mAdapter.setItemClickListener(this);
         mRecyclerView.setAdapter(mAdapter);
 
-        new RecyclerViewUpdateAsyncTask().execute();
+        mLocationViewModel = ViewModelProviders.of(this).get(LocationDataViewModel.class);
+        mLocationViewModel.getAllHeaders().observe(this, new Observer<List<LocationHeaderData>>() {
+            @Override
+            public void onChanged(@Nullable List<LocationHeaderData> locationHeaderData) {
+                mAdapter.swapData(locationHeaderData);
+            }
+        });
     }
 
     @Override
@@ -296,7 +303,6 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
             mTrackingService.stopService();
             mRecordButton.setText(getString(R.string.btn_main_record_start));
             enableEverything();
-            new RecyclerViewUpdateAsyncTask().execute();
             Snackbar.make(mConstraintLayout, getString(R.string.snackBar_record_finished), Snackbar.LENGTH_SHORT).show();
         }
     }
@@ -417,41 +423,7 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
         Intent routeItemIntent = new Intent(this, DetailActivity.class);
         routeItemIntent.putExtra(INTENT_EXTRA_ITEM_KEY, headerData.getItem_key());
         routeItemIntent.putExtra(INTENT_EXTRA_ROUTE_NAME, headerData.getMinTimestamp());
-        startActivityForResult(routeItemIntent, ITEM_REMOVED_REQUEST);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case ITEM_REMOVED_REQUEST: {
-                if (resultCode == RESULT_OK) {
-                    if (StringUtils.equals(data.getAction(), ACTION_ROUTE_REMOVED)) {
-                        //Update RecyclerView
-                        new RecyclerViewUpdateAsyncTask().execute();
-                    }
-                }
-                break;
-            }
-            default:
-                break;
-        }
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private class RecyclerViewUpdateAsyncTask extends AsyncTask<Void, Void, List<LocationHeaderData>> {
-        @Override
-        protected List<LocationHeaderData> doInBackground(Void... voids) {
-            return LocationDbSingleton.getInstance(MainActivity.this).locationDao().getLocationHeaderData();
-        }
-
-        @Override
-        protected void onPostExecute(List<LocationHeaderData> locationHeaderData) {
-            super.onPostExecute(locationHeaderData);
-            mAdapter.swapData(locationHeaderData);
-            //Update shared pref for widget.
-            UtilsSharedPref.setWidgetRouteList(MainActivity.this, locationHeaderData);
-        }
+        startActivity(routeItemIntent);
     }
 
     private class MyAdListener extends AdListener {

@@ -13,7 +13,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
+import eu.wonderfulme.triptracker.App;
 import eu.wonderfulme.triptracker.R;
+import eu.wonderfulme.triptracker.database.LocationRepository;
 import eu.wonderfulme.triptracker.utility.Utils;
 import eu.wonderfulme.triptracker.database.LocationData;
 import eu.wonderfulme.triptracker.database.LocationDbSingleton;
@@ -26,16 +28,18 @@ public class ExportAsyncTask extends AsyncTask<Void, Void, Void> {
     private boolean isSuccessful = false;
     private Snackbar mSnackBar;
     private String mFilename;
+    private LocationRepository mLocationRepos;
 
     public ExportAsyncTask(Context context, Snackbar snackbar, int itemKey) {
         this.mContext = context;
         this.mSnackBar = snackbar;
         this.mItemKey = itemKey;
+        this.mLocationRepos = new LocationRepository(App.getInstance());
     }
 
     @Override
     protected Void doInBackground(Void... voids) {
-        List<LocationData> dataList = LocationDbSingleton.getInstance(mContext).locationDao().getDbData(mItemKey);
+        List<LocationData> dataList = mLocationRepos.getLocationDataPerItemKey(mItemKey);
 
         File exportDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         if (!exportDir.exists()) {

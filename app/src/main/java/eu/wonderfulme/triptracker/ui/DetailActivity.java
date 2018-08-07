@@ -31,11 +31,12 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import eu.wonderfulme.triptracker.App;
 import eu.wonderfulme.triptracker.R;
 import eu.wonderfulme.triptracker.database.LocationData;
 import eu.wonderfulme.triptracker.database.LocationDbSingleton;
+import eu.wonderfulme.triptracker.database.LocationRepository;
 import eu.wonderfulme.triptracker.tasks.ExportAsyncTask;
-import eu.wonderfulme.triptracker.tasks.RemoveAsyncTask;
 import eu.wonderfulme.triptracker.utility.Utils;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
@@ -59,6 +60,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     private Snackbar mSnackBar;
     private SupportMapFragment mMapFragment;
     private InterstitialAd mInterstitialAd;
+    private LocationRepository mLocationRepos;
 
 
     @Override
@@ -72,6 +74,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId(getString(R.string.admob_interstitial_detail_export));
         mInterstitialAd.setAdListener(new MyAdListener());
+        mLocationRepos = new LocationRepository(App.getInstance());
 
         Intent incomingIntent = getIntent();
         if (incomingIntent == null) {
@@ -155,10 +158,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // continue with delete
-                        new RemoveAsyncTask(DetailActivity.this, mSnackBar, mItemKey).execute();
-                        Intent intent = new Intent();
-                        intent.setAction(ACTION_ROUTE_REMOVED);
-                        setResult(RESULT_OK, intent);
+                        mLocationRepos.deleteSingleItemKey(DetailActivity.this, mSnackBar, mItemKey);
                         finish();
 
                     }
@@ -194,7 +194,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
         @Override
         protected Void doInBackground(Void... voids) {
-            mLocationData = LocationDbSingleton.getInstance(DetailActivity.this).locationDao().getDbData(mItemKey);
+            mLocationData = mLocationRepos.getLocationDataPerItemKey(mItemKey);
             return null;
         }
     }

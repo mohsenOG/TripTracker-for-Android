@@ -4,15 +4,11 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.os.AsyncTask;
 
-import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkManager;
 import eu.wonderfulme.triptracker.database.LocationDbSingleton;
-import eu.wonderfulme.triptracker.tasks.NukeDatabaseWorker;
+import eu.wonderfulme.triptracker.database.LocationRepository;
 import eu.wonderfulme.triptracker.utility.GoogleApiHelper;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.ads.MobileAds;
-
-import java.util.concurrent.TimeUnit;
 
 import eu.wonderfulme.triptracker.utility.UtilsSharedPref;
 import io.fabric.sdk.android.Fabric;
@@ -24,6 +20,7 @@ public class App extends Application {
 
     private GoogleApiHelper mGoogleApiHelper;
     private static App mInstance;
+    private LocationRepository mLocationRepos;
 
     @Override
     public void onCreate() {
@@ -32,10 +29,11 @@ public class App extends Application {
         Fabric.with(this, new Crashlytics());
         mInstance = this;
         mGoogleApiHelper = new GoogleApiHelper(mInstance);
+        mLocationRepos = new LocationRepository(mInstance);
         //Init the last DB itemKey to shared Prefs.
         new ItemKeyInitializerAsyncTask().execute();
-        // Check if db should be nuked
-        nukeDbChecker();
+        // Nuke db if needed
+        mLocationRepos.nukeDatabaseIfNeeded(mInstance);
         // Init admob
         MobileAds.initialize(mInstance, getString(R.string.admob_app_id));
     }
@@ -56,20 +54,9 @@ public class App extends Application {
     private class ItemKeyInitializerAsyncTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... voids) {
-            int lastItemKey = LocationDbSingleton.getInstance(mInstance).locationDao().getLastItemKey();
+            int lastItemKey = mLocationRepos.getLastItemKey();
             UtilsSharedPref.setItemKeyToSharedPref(mInstance, lastItemKey);
             return null;
-        }
-    }
-
-    private void nukeDbChecker() {
-        boolean initWorker = UtilsSharedPref.getNukeDbChecker(mInstance);
-        if (!initWorker) {
-            PeriodicWorkRequest.Builder nukeDbBuilder =  new PeriodicWorkRequest.Builder(NukeDatabaseWorker.class, 1, TimeUnit.DAYS);
-            PeriodicWorkRequest worker = nukeDbBuilder.build();
-            WorkManager.getInstance().enqueue(worker);
-            //Set the shared pref to true.
-            UtilsSharedPref.setNukeDbChecker(mInstance, true);
         }
     }
 }
