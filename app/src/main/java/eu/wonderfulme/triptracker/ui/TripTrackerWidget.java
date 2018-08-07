@@ -14,16 +14,12 @@ import eu.wonderfulme.triptracker.R;
 import eu.wonderfulme.triptracker.utility.UtilsSharedPref;
 
 public class TripTrackerWidget extends AppWidgetProvider {
-    public static final String ACTION_ROUTES_CHANGED = "ACTION_ROUTES_CHANGED";
     private String mRoutes;
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (intent != null && StringUtils.equals(intent.getAction(), ACTION_ROUTES_CHANGED)) {
-            mRoutes = UtilsSharedPref.getWidgetRoutes(context);
-        } else {
-            super.onReceive(context, intent);
-        }
+        super.onReceive(context, intent);
+        mRoutes = UtilsSharedPref.getWidgetRoutes(context);
     }
 
     @Override
@@ -37,17 +33,19 @@ public class TripTrackerWidget extends AppWidgetProvider {
     public void onEnabled(Context context) {
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_trip_tracker);
         String routes = UtilsSharedPref.getWidgetRoutes(context);
-        if (routes != null && routes.isEmpty()) {
+        if (StringUtils.isEmpty(routes)) {
             remoteViews.setTextViewText(R.id.tv_widget, routes);
         }
     }
 
     private static void update(Context context, AppWidgetManager appWidgetManager, int appWidgetId, String routes) {
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_trip_tracker);
-        if (TextUtils.isEmpty(routes)) {
-            routes = UtilsSharedPref.getWidgetRoutes(context);
+        routes = UtilsSharedPref.getWidgetRoutes(context);
+        if (!StringUtils.isEmpty(routes)) {
+            remoteViews.setTextViewText(R.id.tv_widget, routes);
+        } else {
+            remoteViews.setTextViewText(R.id.tv_widget, context.getString(R.string.widget_no_route_available));
         }
-        remoteViews.setTextViewText(R.id.tv_widget, routes);
 
         //Click Listener only if app is not recording
         if (!UtilsSharedPref.getWidgetServiceChecker(context)) {

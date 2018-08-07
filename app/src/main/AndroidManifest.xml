@@ -74,7 +74,6 @@
         <receiver android:name=".ui.TripTrackerWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="ACTION_ROUTES_CHANGED"/>
             </intent-filter>
 
             <meta-data

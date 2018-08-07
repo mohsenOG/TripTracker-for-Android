@@ -1,9 +1,11 @@
 package eu.wonderfulme.triptracker.ui;
 
 import android.Manifest;
+import android.appwidget.AppWidgetManager;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -127,6 +129,15 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
             @Override
             public void onChanged(@Nullable List<LocationHeaderData> locationHeaderData) {
                 mAdapter.swapData(locationHeaderData);
+                // Update widget
+                if (locationHeaderData != null) {
+                    UtilsSharedPref.setWidgetRouteList(MainActivity.this, locationHeaderData);
+                    Intent intent = new Intent(MainActivity.this, TripTrackerWidget.class);
+                    intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+                    int[] ids = AppWidgetManager.getInstance(getApplicationContext()).getAppWidgetIds(new ComponentName(getApplicationContext(), TripTrackerWidget.class));
+                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+                    sendBroadcast(intent);
+                }
             }
         });
     }
