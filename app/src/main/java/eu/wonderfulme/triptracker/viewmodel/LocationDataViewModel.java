@@ -12,8 +12,8 @@ import eu.wonderfulme.triptracker.database.LocationRepository;
 
 public class LocationDataViewModel extends AndroidViewModel {
 
-    private LocationRepository mLocationRepository;
-    private LiveData<List<LocationHeaderData>> mAllHeaders;
+    private final LocationRepository mLocationRepository;
+    private final LiveData<List<LocationHeaderData>> mAllHeaders;
 
     public LocationDataViewModel(@NonNull Application application) {
         super(application);

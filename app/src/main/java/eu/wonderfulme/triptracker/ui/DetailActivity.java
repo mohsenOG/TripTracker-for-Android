@@ -34,7 +34,6 @@ import butterknife.ButterKnife;
 import eu.wonderfulme.triptracker.App;
 import eu.wonderfulme.triptracker.R;
 import eu.wonderfulme.triptracker.database.LocationData;
-import eu.wonderfulme.triptracker.database.LocationDbSingleton;
 import eu.wonderfulme.triptracker.database.LocationRepository;
 import eu.wonderfulme.triptracker.tasks.ExportAsyncTask;
 import eu.wonderfulme.triptracker.utility.Utils;

@@ -18,17 +18,16 @@ import eu.wonderfulme.triptracker.R;
 import eu.wonderfulme.triptracker.database.LocationRepository;
 import eu.wonderfulme.triptracker.utility.Utils;
 import eu.wonderfulme.triptracker.database.LocationData;
-import eu.wonderfulme.triptracker.database.LocationDbSingleton;
 
 public class ExportAsyncTask extends AsyncTask<Void, Void, Void> {
 
     @SuppressLint("StaticFieldLeak")
     private final Context mContext;
-    private int mItemKey;
+    private final int mItemKey;
     private boolean isSuccessful = false;
-    private Snackbar mSnackBar;
+    private final Snackbar mSnackBar;
     private String mFilename;
-    private LocationRepository mLocationRepos;
+    private final LocationRepository mLocationRepos;
 
     public ExportAsyncTask(Context context, Snackbar snackbar, int itemKey) {
         this.mContext = context;

@@ -56,7 +56,6 @@ import eu.wonderfulme.triptracker.viewmodel.LocationDataViewModel;
 import static eu.wonderfulme.triptracker.location.LocationService.ACTION_PARKING_LOCATION_SAVED;
 import static eu.wonderfulme.triptracker.location.SearchLocation.LOCATION_TYPE_SINGLE;
 import static eu.wonderfulme.triptracker.location.SearchLocation.LOCATION_TYPE_TRACK;
-import static eu.wonderfulme.triptracker.ui.DetailActivity.ACTION_ROUTE_REMOVED;
 
 public class MainActivity extends AppCompatActivity implements RoutesRecyclerViewAdapter.ItemClickListener {
 

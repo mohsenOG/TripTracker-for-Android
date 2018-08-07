@@ -3,7 +3,7 @@ package eu.wonderfulme.triptracker.database;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 
-public class LocationDbSingleton {
+class LocationDbSingleton {
 
     private static LocationDatabase instance = null;
 

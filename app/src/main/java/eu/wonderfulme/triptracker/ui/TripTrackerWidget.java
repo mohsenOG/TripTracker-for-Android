@@ -5,7 +5,6 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.text.TextUtils;
 import android.widget.RemoteViews;
 
 import org.apache.commons.lang3.StringUtils;
@@ -14,18 +13,11 @@ import eu.wonderfulme.triptracker.R;
 import eu.wonderfulme.triptracker.utility.UtilsSharedPref;
 
 public class TripTrackerWidget extends AppWidgetProvider {
-    private String mRoutes;
-
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        super.onReceive(context, intent);
-        mRoutes = UtilsSharedPref.getWidgetRoutes(context);
-    }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds) {
-            update(context, appWidgetManager, appWidgetId, mRoutes);
+            update(context, appWidgetManager, appWidgetId);
         }
     }
 
@@ -38,9 +30,9 @@ public class TripTrackerWidget extends AppWidgetProvider {
         }
     }
 
-    private static void update(Context context, AppWidgetManager appWidgetManager, int appWidgetId, String routes) {
+    private static void update(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_trip_tracker);
-        routes = UtilsSharedPref.getWidgetRoutes(context);
+        String routes = UtilsSharedPref.getWidgetRoutes(context);
         if (!StringUtils.isEmpty(routes)) {
             remoteViews.setTextViewText(R.id.tv_widget, routes);
         } else {
