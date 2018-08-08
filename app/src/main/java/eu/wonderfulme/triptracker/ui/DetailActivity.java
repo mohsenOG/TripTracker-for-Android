@@ -204,11 +204,5 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
             super.onAdClosed();
             exportCsv();
         }
-
-        @Override
-        public void onAdFailedToLoad(int i) {
-            super.onAdFailedToLoad(i);
-            exportCsv();
-        }
     }
 }

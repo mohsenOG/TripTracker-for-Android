@@ -441,13 +441,6 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
         public void onAdClosed() {
             super.onAdClosed();
             showOption();
-
-        }
-
-        @Override
-        public void onAdFailedToLoad(int i) {
-            super.onAdFailedToLoad(i);
-            showOption();
         }
     }
 }
