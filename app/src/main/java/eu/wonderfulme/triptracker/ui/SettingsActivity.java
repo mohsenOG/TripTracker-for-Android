@@ -16,7 +16,7 @@ public class SettingsActivity extends AppCompatActivity implements SettingsFragm
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-
+        setTitle(getString(R.string.action_setting));
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
