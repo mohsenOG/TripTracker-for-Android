@@ -234,12 +234,15 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem settingsItem = menu.findItem(R.id.action_setting);
         MenuItem aboutItem = menu.findItem(R.id.action_about);
+        MenuItem privacyItem = menu.findItem(R.id.action_privacy);
         if (mIsEverythingDisabled) {
             settingsItem.setEnabled(false);
             aboutItem.setEnabled(false);
+            privacyItem.setEnabled(false);
         } else {
             settingsItem.setEnabled(true);
             aboutItem.setEnabled(true);
+            privacyItem.setEnabled(true);
         }
         return true;
     }
@@ -274,6 +277,9 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
             startActivity(intent);
         } else if (mOptionMenuId == R.id.action_about) {
             Intent intent = new Intent(this, AboutActivity.class);
+            startActivity(intent);
+        } else if (mOptionMenuId == R.id.action_privacy) {
+            Intent intent = new Intent(this, PrivacyPolicyActivity.class);
             startActivity(intent);
         }
     }

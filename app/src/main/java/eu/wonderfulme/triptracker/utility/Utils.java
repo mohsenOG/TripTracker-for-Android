@@ -12,6 +12,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -81,6 +85,29 @@ public class Utils {
         } else {
             return context.getString(R.string.welcome_night);
         }
+    }
+
+    /**
+     *
+     * @param stream stream to be read
+     * @return string read from stream otherwise, null.
+     * NOTE: This function will not close() the input stream.
+     */
+    static public String toString(InputStream stream)
+    {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+        StringBuilder builder = new StringBuilder();
+
+        String line;
+        try {
+            while ((line = reader.readLine()) != null) {
+                builder.append(line).append("\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return builder.toString();
     }
 
 }

@@ -9,7 +9,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
-
     <application
         android:name=".App"
         android:allowBackup="false"
@@ -23,15 +22,14 @@
         <!-- Google Maps API key -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/GOOGLE_MAPS_API_KEY"/>
+            android:value="@string/GOOGLE_MAPS_API_KEY" />
         <!-- Because of weird maps library crash @see https://stackoverflow.com/a/50794266/6072457 -->
-        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
-
-        <!-- Google admob key -->
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" /> <!-- Google admob key -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="@string/admob_app_id" />
-
         <!-- Location Service -->
         <service
             android:name=".location.LocationService"
@@ -43,6 +41,7 @@
             android:theme="@style/AppTheme.Transparent">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -77,6 +76,13 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.AboutActivity" />
+        </activity>
+        <!-- Privacy Activity -->
+        <activity android:name=".ui.PrivacyPolicyActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.PrivacyPolicyActivity" />
         </activity>
         <!-- App Widget -->
         <receiver android:name=".ui.TripTrackerWidget">
