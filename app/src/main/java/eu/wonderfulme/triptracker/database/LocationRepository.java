@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.Worker;
+import androidx.work.WorkerParameters;
 import eu.wonderfulme.triptracker.R;
 import eu.wonderfulme.triptracker.utility.Utils;
 import eu.wonderfulme.triptracker.utility.UtilsSharedPref;
@@ -108,6 +109,10 @@ public class LocationRepository {
     }
 
     private class NukeDatabaseWorker extends Worker {
+        public NukeDatabaseWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+            super(context, workerParams);
+        }
+
         @NonNull
         @Override
         public Worker.Result doWork() {
@@ -115,7 +120,7 @@ public class LocationRepository {
             String timeYesterdayFormatted = Utils.getYesterdayFormattedTime();
             // nuke rows more than 30 days.
             mLocationDao.nukeRowsMoreThan30Days(timeYesterdayFormatted);
-            return Result.SUCCESS;
+            return Worker.Result.success();
         }
     }
 }
