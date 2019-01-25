@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
 
     <application
@@ -23,6 +24,8 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/GOOGLE_MAPS_API_KEY"/>
+        <!-- Because of weird maps library crash @see https://stackoverflow.com/a/50794266/6072457 -->
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
 
         <!-- Google admob key -->
         <meta-data
