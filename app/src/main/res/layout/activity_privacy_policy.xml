@@ -14,8 +14,6 @@
         android:layout_margin="@dimen/margin_about_less"
         android:visibility="gone"/>
 
-
-
     <WebView
         android:id="@+id/wv_privacy"
         android:layout_width="match_parent"

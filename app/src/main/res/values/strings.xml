@@ -80,7 +80,7 @@
     <string name="action_privacy">Privacy Policy</string>
 
     <!-- About page strings -->
-    <string name="about_my_app" translatable="false">Trip Tracker v1.0</string>
+    <string name="about_my_app" translatable="false">Trip Tracker v1.1</string>
     <string name="about_trademark" translatable="false">\u00A9 2018 Mohsen Oghbaei - WonderfulMe.eu</string>
     <string name="about_found_bug" translatable="false">Found a bug? let us know:</string>
     <string name="about_found_bug_email" translatable="false">info@wonderfulme.eu</string>
