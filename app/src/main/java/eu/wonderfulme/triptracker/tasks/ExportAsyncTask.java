@@ -3,7 +3,7 @@ package eu.wonderfulme.triptracker.tasks;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Environment;
-import android.support.design.widget.Snackbar;
+import com.google.android.material.snackbar.Snackbar;
 import android.os.AsyncTask;
 
 import com.opencsv.CSVWriter;
