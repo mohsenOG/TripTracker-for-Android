@@ -23,7 +23,7 @@
     <string name="preference_widget_service_status" translatable="false">preference_widget_service_status</string>
     <string name="preference_widget_route_list" translatable="false">preference_widget_route_list</string>
 
-    <string name="pref_settings_record_type_title">Record type</string>
+    <string name="pref_settings_record_type_title">Recording period</string>
     <string name="pref_settings_record_type_key" translatable="false">preference_settings_record_type_key</string>
     <string name="pref_settings_record_type_dialog">Please choose a recording period.</string>
     <string name="pref_settings_record_type_car">Car</string>
@@ -67,12 +67,12 @@
     <string name="alert_ask_quit">Quit?</string>
     <string name="alert_ask_quit_msg">Trip Tracker will stop recording your location!</string>
     <!-- Buttons -->
-    <string name="btn_save_parking">SAVE PARKING</string>
-    <string name="btn_restore_parking">SHOW PARKING</string>
-    <string name="btn_remove_parking">REMOVE PARKING</string>
-    <string name="btn_main_record_start">RECORD</string>
-    <string name="btn_main_record_stop">STOP RECORD</string>
-    <string name="btn_detail_export">EXPORT CSV</string>
+    <string name="btn_save_parking">SAVE PARKING\nLOCATION</string>
+    <string name="btn_restore_parking">SHOW PARKING\nLOCATION</string>
+    <string name="btn_remove_parking">REMOVE PARKING\nLOCATION</string>
+    <string name="btn_main_record_start">Record a Trip</string>
+    <string name="btn_main_record_stop">Stop Recording</string>
+    <string name="btn_detail_export">Export as CSV</string>
     <string name="btn_detail_remove">REMOVE</string>
     <!-- Actions -->
     <string name="action_setting">Settings</string>
