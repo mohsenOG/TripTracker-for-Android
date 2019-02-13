@@ -45,7 +45,6 @@ import static eu.wonderfulme.triptracker.ui.MainActivity.INTENT_EXTRA_ROUTE_NAME
 
 public class DetailActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapLoadedCallback {
 
-    static final String ACTION_ROUTE_REMOVED = "ACTION_ROUTE_REMOVED";
     private static final String SAVE_STATE_LOCATION_DATA_KEY = "SAVE_STATE_LOCATION_DATA_KEY";
     private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 103;
 
@@ -86,7 +85,6 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map);
         if (savedInstanceState == null) {
             new LocationDataQueryAsyncTask().execute();
-            mMapFragment.getMapAsync(this);
         }
     }
 
@@ -195,6 +193,12 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         protected Void doInBackground(Void... voids) {
             mLocationData = mLocationRepos.getLocationDataPerItemKey(mItemKey);
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            mMapFragment.getMapAsync(DetailActivity.this);
         }
     }
 
