@@ -3,8 +3,10 @@ package eu.wonderfulme.triptracker.location;
 import android.content.Context;
 import android.content.Intent;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.provider.Settings;
 
 import eu.wonderfulme.triptracker.utility.UtilsSharedPref;
 
@@ -26,13 +28,18 @@ public class SearchLocation implements Parcelable {
         mServiceIntent.putExtra(INTENT_EXTRA_LOCATION_REQUEST_TYPE, mRequestType);
     }
 
-    public boolean isGpsOn() {
-        boolean ret = false;
-        final LocationManager manager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
-        if (manager != null) {
-            ret = manager.isProviderEnabled( LocationManager.GPS_PROVIDER);
+    /**
+     * https://stackoverflow.com/a/54648795/6072457
+     */
+    public boolean isLocationEnabled() {
+        // API 28 and higher
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+          final LocationManager lm = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
+          return lm.isLocationEnabled();
+        } else { // API less than 28
+            int mode = Settings.Secure.getInt(mContext.getContentResolver(), Settings.Secure.LOCATION_MODE, Settings.Secure.LOCATION_MODE_OFF);
+            return (mode != Settings.Secure.LOCATION_MODE_OFF);
         }
-        return ret;
     }
 
     public void startService() {

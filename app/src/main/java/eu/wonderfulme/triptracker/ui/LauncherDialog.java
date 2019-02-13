@@ -141,7 +141,7 @@ class LauncherDialog extends Dialog implements View.OnClickListener, ActivityCom
 
     private void checkGPSAndStartService() {
         SearchLocation searchLocation = new SearchLocation(mContext, LOCATION_TYPE_SINGLE);
-        boolean isGpsOn = searchLocation.isGpsOn();
+        boolean isGpsOn = searchLocation.isLocationEnabled();
         if (App.getGoogleApiHelper().isConnected() && isGpsOn){
             searchLocation.startService();
         } else {

@@ -34,10 +34,6 @@ public class GoogleApiHelper implements GoogleApiClient.ConnectionCallbacks, Goo
         connect();
     }
 
-    public GoogleApiClient getGoogleApiClient() {
-        return this.mGoogleApiClient;
-    }
-
     public void setConnectionListener(ConnectionListener connectionListener) {
         this.mConnectionListener = connectionListener;
         if (this.mConnectionListener != null && isConnected()) {

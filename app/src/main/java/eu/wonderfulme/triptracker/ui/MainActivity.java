@@ -365,7 +365,7 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
 
     private void checkGPSAndStartParkingService() {
         SearchLocation searchLocation = new SearchLocation(this, LOCATION_TYPE_SINGLE);
-        boolean isGpsOn = searchLocation.isGpsOn();
+        boolean isGpsOn = searchLocation.isLocationEnabled();
         if (App.getGoogleApiHelper().isConnected() && isGpsOn){
             searchLocation.startService();
         } else {
@@ -378,7 +378,7 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
         if (mTrackingService == null) {
             mTrackingService = new SearchLocation(this, LOCATION_TYPE_TRACK);
         }
-        boolean isGpsOn = mTrackingService.isGpsOn();
+        boolean isGpsOn = mTrackingService.isLocationEnabled();
         if (App.getGoogleApiHelper().isConnected() && isGpsOn){
             mTrackingService.startService();
         } else {
