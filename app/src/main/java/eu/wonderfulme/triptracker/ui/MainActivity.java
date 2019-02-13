@@ -51,7 +51,7 @@ import eu.wonderfulme.triptracker.R;
 import eu.wonderfulme.triptracker.database.LocationHeaderData;
 import eu.wonderfulme.triptracker.location.SearchLocation;
 import eu.wonderfulme.triptracker.utility.UtilsSharedPref;
-import eu.wonderfulme.triptracker.viewmodel.LocationDataViewModel;
+import eu.wonderfulme.triptracker.viewmodel.MainActivityViewModel;
 
 import static eu.wonderfulme.triptracker.location.LocationService.ACTION_PARKING_LOCATION_SAVED;
 import static eu.wonderfulme.triptracker.location.SearchLocation.LOCATION_TYPE_SINGLE;
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
     private boolean mIsEverythingDisabled = false;
     private SearchLocation mTrackingService;
     private int mOptionMenuId;
-    private LocationDataViewModel mLocationViewModel;
+    private MainActivityViewModel mainActivityViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,8 +123,8 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
         mAdapter.setItemClickListener(this);
         mRecyclerView.setAdapter(mAdapter);
 
-        mLocationViewModel = ViewModelProviders.of(this).get(LocationDataViewModel.class);
-        mLocationViewModel.getAllHeaders().observe(this, new Observer<List<LocationHeaderData>>() {
+        mainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
+        mainActivityViewModel.getAllHeaders().observe(this, new Observer<List<LocationHeaderData>>() {
             @Override
             public void onChanged(@Nullable List<LocationHeaderData> locationHeaderData) {
                 mAdapter.swapData(locationHeaderData);

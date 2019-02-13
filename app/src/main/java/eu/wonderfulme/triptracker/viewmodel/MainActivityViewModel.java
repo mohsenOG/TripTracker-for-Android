@@ -10,12 +10,12 @@ import java.util.List;
 import eu.wonderfulme.triptracker.database.LocationHeaderData;
 import eu.wonderfulme.triptracker.database.LocationRepository;
 
-public class LocationDataViewModel extends AndroidViewModel {
+public class MainActivityViewModel extends AndroidViewModel {
 
     private final LocationRepository mLocationRepository;
     private final LiveData<List<LocationHeaderData>> mAllHeaders;
 
-    public LocationDataViewModel(@NonNull Application application) {
+    public MainActivityViewModel(@NonNull Application application) {
         super(application);
         mLocationRepository = new LocationRepository(application);
         mAllHeaders = mLocationRepository.getAllLocationHeaderData();

@@ -29,6 +29,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import java.io.Serializable;
 import java.util.List;
 
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import eu.wonderfulme.triptracker.App;
@@ -37,6 +39,8 @@ import eu.wonderfulme.triptracker.database.LocationData;
 import eu.wonderfulme.triptracker.database.LocationRepository;
 import eu.wonderfulme.triptracker.tasks.ExportAsyncTask;
 import eu.wonderfulme.triptracker.utility.Utils;
+import eu.wonderfulme.triptracker.viewmodel.DetailActivityViewModel;
+import eu.wonderfulme.triptracker.viewmodel.DetailActivityViewModelFactory;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static eu.wonderfulme.triptracker.ui.MainActivity.INTENT_EXTRA_ITEM_KEY;
@@ -52,14 +56,11 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     @BindView(R.id.btn_detail_remove) protected Button mRemoveButton;
     @BindView(R.id.detail_activity_layout) protected ConstraintLayout mConstraintLayout;
     @BindView(R.id.adView_detail_activity) protected AdView mBannerAdView;
-    private int mItemKey;
-    private List<LocationData> mLocationData;
     private GoogleMap mMap;
     private Snackbar mSnackBar;
     private SupportMapFragment mMapFragment;
     private InterstitialAd mInterstitialAd;
-    private LocationRepository mLocationRepos;
-
+    private DetailActivityViewModel detailActivityViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,26 +73,30 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId(getString(R.string.admob_interstitial_detail_export));
         mInterstitialAd.setAdListener(new MyAdListener());
-        mLocationRepos = new LocationRepository(App.getInstance());
 
         Intent incomingIntent = getIntent();
         if (incomingIntent == null) {
             throw new RuntimeException(this.toString() + " must receive Route header");
         }
-        // Get location data
+
         setTitle(incomingIntent.getStringExtra(INTENT_EXTRA_ROUTE_NAME));
-        mItemKey = incomingIntent.getIntExtra(INTENT_EXTRA_ITEM_KEY, -1);
-        mSnackBar = Snackbar.make(mConstraintLayout, "", Snackbar.LENGTH_LONG);
+        int itemKey = incomingIntent.getIntExtra(INTENT_EXTRA_ITEM_KEY, -1);
         mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map);
-        if (savedInstanceState == null) {
-            new LocationDataQueryAsyncTask().execute();
-        }
+
+        detailActivityViewModel = ViewModelProviders.of(this, new DetailActivityViewModelFactory(this.getApplication(), itemKey)).get(DetailActivityViewModel.class);
+        detailActivityViewModel.getLocationData().observe(this, new Observer<List<LocationData>>() {
+            @Override
+            public void onChanged(List<LocationData> locationData) {
+                mMapFragment.getMapAsync(DetailActivity.this);
+            }
+        });
+
+        mSnackBar = Snackbar.make(mConstraintLayout, "", Snackbar.LENGTH_LONG);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(SAVE_STATE_LOCATION_DATA_KEY, (Serializable) mLocationData);
         mMapFragment.onSaveInstanceState(outState);
     }
 
@@ -99,7 +104,6 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        mLocationData = (List<LocationData>) savedInstanceState.getSerializable(SAVE_STATE_LOCATION_DATA_KEY);
         mMapFragment.onViewStateRestored(savedInstanceState);
         mMapFragment.getMapAsync(this);
     }
@@ -110,7 +114,8 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             switch (requestCode) {
                 case MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE:
-                    new ExportAsyncTask(this, mSnackBar, mItemKey);
+                    List<LocationData> locationData = detailActivityViewModel.getLocationData().getValue();
+                    new ExportAsyncTask(this, mSnackBar, locationData);
                     break;
             }
         } else {
@@ -139,7 +144,8 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
         } else {
             //Permission is already granted.
-            new ExportAsyncTask(this, mSnackBar, mItemKey).execute();
+            List<LocationData> locationData = detailActivityViewModel.getLocationData().getValue();
+            new ExportAsyncTask(this, mSnackBar, locationData).execute();
         }
     }
 
@@ -155,7 +161,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // continue with delete
-                        mLocationRepos.deleteSingleItemKey(DetailActivity.this, mSnackBar, mItemKey);
+                        detailActivityViewModel.deleteSingleItemKey(DetailActivity.this, mSnackBar);
                         finish();
 
                     }
@@ -174,31 +180,17 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setOnMapLoadedCallback(this);
-        if (mMap != null &&  mLocationData != null && !mLocationData.isEmpty()) {
-            mMap.addPolyline(Utils.getPolyLine(mLocationData));
+        List<LocationData> locationData = detailActivityViewModel.getLocationData().getValue();
+        if (mMap != null &&  locationData != null && !locationData.isEmpty()) {
+            mMap.addPolyline(Utils.getPolyLine(locationData));
         }
     }
 
     @Override
     public void onMapLoaded() {
-        if (mLocationData != null && !mLocationData.isEmpty()) {
-            mMap.animateCamera(Utils.getMapCameraBounds(mLocationData));
-        }
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private class LocationDataQueryAsyncTask extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            mLocationData = mLocationRepos.getLocationDataPerItemKey(mItemKey);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            mMapFragment.getMapAsync(DetailActivity.this);
+        List<LocationData> locationData = detailActivityViewModel.getLocationData().getValue();
+        if (locationData != null && !locationData.isEmpty()) {
+            mMap.animateCamera(Utils.getMapCameraBounds(locationData));
         }
     }
 

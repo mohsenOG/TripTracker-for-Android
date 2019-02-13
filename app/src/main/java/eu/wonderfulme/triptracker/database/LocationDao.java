@@ -17,7 +17,7 @@ public interface LocationDao {
     LiveData<List<LocationHeaderData>> getAllLocationHeaderData();
 
     @Query("SELECT * FROM LocationData WHERE item_key = :itemKey")
-    List<LocationData> getLocationDataPerItemKey(int itemKey);
+    LiveData<List<LocationData>> getLocationDataPerItemKey(int itemKey);
 
     @Query("SELECT item_key FROM LocationData ORDER BY item_key DESC LIMIT 1")
     int getLastItemKey();

@@ -6,6 +6,8 @@ import androidx.lifecycle.LiveData;
 import android.content.Context;
 import android.os.AsyncTask;
 import androidx.annotation.NonNull;
+
+import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
@@ -22,15 +24,17 @@ import eu.wonderfulme.triptracker.utility.UtilsSharedPref;
 public class LocationRepository {
 
     private LocationDao mLocationDao;
-    private LiveData<List<LocationHeaderData>> mAllLocationHeaderData;
 
     public LocationRepository(Application application) {
         mLocationDao = LocationDbSingleton.getInstance(application).locationDao();
-        mAllLocationHeaderData = mLocationDao.getAllLocationHeaderData();
     }
 
     public LiveData<List<LocationHeaderData>> getAllLocationHeaderData() {
-        return mAllLocationHeaderData;
+        return mLocationDao.getAllLocationHeaderData();
+    }
+
+    public LiveData<List<LocationData>> getLocationDataPerItemKey(int itemKey) {
+        return mLocationDao.getLocationDataPerItemKey(itemKey);
     }
 
     public void insert(LocationData locationData) {
@@ -59,12 +63,6 @@ public class LocationRepository {
         return mLocationDao.getLastItemKey();
     }
 
-    /**
-     * Must not be called via UI thread.
-     */
-    public List<LocationData> getLocationDataPerItemKey(int itemKey) {
-        return mLocationDao.getLocationDataPerItemKey(itemKey);
-    }
 
     private static class InsertLocationAsyncTask extends AsyncTask<LocationData, Void, Void> {
         private LocationDao mLocationDao;
@@ -103,7 +101,7 @@ public class LocationRepository {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             mSnackBar.setText(mContext.getResources().getString(R.string.snackBar_remove_succeed))
-                    .setDuration(Snackbar.LENGTH_LONG)
+                    .setDuration(BaseTransientBottomBar.LENGTH_SHORT)
                     .show();
         }
     }
