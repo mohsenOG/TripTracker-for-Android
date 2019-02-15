@@ -2,6 +2,8 @@ package eu.wonderfulme.triptracker.ui;
 
 import android.Manifest;
 import android.appwidget.AppWidgetManager;
+
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import android.content.BroadcastReceiver;
@@ -88,13 +90,8 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        // ad request
-        mBannerAdView = findViewById(R.id.adView_main_activity);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mBannerAdView.loadAd(adRequest);
-        mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId(getString(R.string.admob_interstitial_option_menu));
-        mInterstitialAd.setAdListener(new MyAdListener());
+        adInitAndRequest();
+
         // Check the location if it is valid show the restore button.
         List<String> parkingLocation = UtilsSharedPref.getParkingLocationFromSharedPref(this);
         if (!CollectionUtils.isEmpty(parkingLocation)) {
@@ -127,6 +124,7 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
         mainActivityViewModel.getAllHeaders().observe(this, new Observer<List<LocationHeaderData>>() {
             @Override
             public void onChanged(@Nullable List<LocationHeaderData> locationHeaderData) {
+                // Update recyclerView data
                 mAdapter.swapData(locationHeaderData);
                 // Update widget
                 if (locationHeaderData != null) {
@@ -317,6 +315,12 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
             }
         } else { // if stop record is clicked.
             mTrackingService.stopService();
+            //Open dialog and ask filename:
+            FilenameDialogFragment filenameDialog = FilenameDialogFragment.newInstance(UtilsSharedPref.getLastItemKeyFromSharedPref(this));
+            filenameDialog.setCancelable(false);
+            filenameDialog.show(getSupportFragmentManager(), "FilenameDialogFragment");
+
+            //
             mRecordButton.setText(getString(R.string.btn_main_record_start));
             enableEverything();
             Snackbar.make(mConstraintLayout, getString(R.string.snackBar_record_finished), Snackbar.LENGTH_SHORT).show();
@@ -373,13 +377,22 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
         if (mTrackingService == null) {
             mTrackingService = new SearchLocation(this, LOCATION_TYPE_TRACK);
         }
-        boolean isGpsOn = mTrackingService.isLocationEnabled();
-        if (App.getGoogleApiHelper().isConnected() && isGpsOn){
+        boolean isLocationEnabled = mTrackingService.isLocationEnabled();
+        if (App.getGoogleApiHelper().isConnected() && isLocationEnabled){
             mTrackingService.startService();
         } else {
             showProgressBar(false);
             buildAlertMessageNoGps();
         }
+    }
+
+    private void adInitAndRequest() {
+        mBannerAdView = findViewById(R.id.adView_main_activity);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mBannerAdView.loadAd(adRequest);
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(getString(R.string.admob_interstitial_option_menu));
+        mInterstitialAd.setAdListener(new MyAdListener());
     }
 
     private void buildAlertMessageNoGps() {
@@ -433,7 +446,7 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
     public void onItemClick(LocationHeaderData headerData) {
         Intent routeItemIntent = new Intent(this, DetailActivity.class);
         routeItemIntent.putExtra(INTENT_EXTRA_ITEM_KEY, headerData.getItem_key());
-        routeItemIntent.putExtra(INTENT_EXTRA_ROUTE_NAME, headerData.getMinTimestamp());
+        routeItemIntent.putExtra(INTENT_EXTRA_ROUTE_NAME, headerData.getFilename());
         startActivity(routeItemIntent);
     }
 

@@ -2,8 +2,11 @@ package eu.wonderfulme.triptracker.database;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import android.content.Context;
+import android.location.Location;
+
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
@@ -26,6 +29,7 @@ public class LocationData implements Serializable{
     private double longitude;
     private double altitude;
     private float speed;
+    private String filename;
 
     /**
      * this function is used to return the headers for CSV file.
@@ -43,6 +47,18 @@ public class LocationData implements Serializable{
         return new String[] {timestamp, String.valueOf(latitude), String.valueOf(longitude),
                 String.valueOf(altitude), String.valueOf(speed)};
 
+    }
+
+    //https://stackoverflow.com/a/48088702/6072457
+    @Ignore
+    public LocationData(@NonNull String timestamp, int itemKey, double latitude, double longitude, double altitude, float speed, String filename) {
+        this.timestamp = timestamp;
+        this.itemKey = itemKey;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.altitude = altitude;
+        this.speed = speed;
+        this.filename = filename;
     }
 
     public LocationData(@NonNull String timestamp, int itemKey, double latitude, double longitude, double altitude, float speed) {
@@ -103,4 +119,7 @@ public class LocationData implements Serializable{
         this.speed = speed;
     }
 
+    public String getFilename() { return filename; }
+
+    public void setFilename(String filename) { this.filename = filename; }
 }

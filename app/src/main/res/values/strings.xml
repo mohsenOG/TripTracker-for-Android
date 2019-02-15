@@ -54,7 +54,9 @@
     <string name="gps_is_not_on">Your GPS seems to be disabled, do you want to enable it?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="save">Save</string>
     <string name="apply">APPLY</string>
+    <string name="cancel">Cancel</string>
     <string name="widget_no_route_available">There is no route available.</string>
     <string name="select_period_hint">Please choose a record period (seconds)</string>
     <string name="welcome_morning">Good Morning</string>
@@ -90,5 +92,9 @@
     <string name="about_opencsv_license" translatable="false"><a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License Version 2.0</a></string>
 
     <string name="privacy_failed_to_load">Failed to load privacy policy page!</string>
+
+    <!-- Filename Dialog -->
+    <string name="filename_dialog_title">Saving Route</string>
+    <string name="filename_dialog_message">Enter a route name</string>
 
 </resources>

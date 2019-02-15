@@ -91,7 +91,7 @@ public class RoutesRecyclerViewAdapter extends RecyclerView.Adapter<RoutesRecycl
 
         void bindView(LocationHeaderData item) {
             mItem = item;
-            mRouteNamesTextView.setText(item.getMinTimestamp());
+            mRouteNamesTextView.setText(item.getFilename());
         }
     }
 }

@@ -139,7 +139,7 @@ public class LocationService extends Service implements LocationListener {
                 speed = location.getSpeed();
             }
             int itemKey = UtilsSharedPref.getLastItemKeyFromSharedPref(mContext);
-            if (itemKey == -100)
+            if (itemKey == UtilsSharedPref.DEFAULT_LAST_ITEM_KEY)
                 return;
             LocationData dbData = new LocationData(timestamp, itemKey, latitude, longitude, altitude, speed);
             mLocationRepos.insert(dbData);

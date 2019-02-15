@@ -13,7 +13,7 @@ public interface LocationDao {
     @Insert
     void insertSingleRecord(LocationData data);
 
-    @Query("SELECT item_key, MIN(timestamp) as minTimestamp FROM LocationData GROUP BY item_key")
+    @Query("SELECT item_key, MIN(timestamp) as minTimestamp, filename FROM LocationData GROUP BY item_key")
     LiveData<List<LocationHeaderData>> getAllLocationHeaderData();
 
     @Query("SELECT * FROM LocationData WHERE item_key = :itemKey")
@@ -27,6 +27,9 @@ public interface LocationDao {
 
     @Query("DELETE FROM LocationData WHERE item_key = :itemKey")
     void deleteSingleItemKey(int itemKey);
+
+    @Query("UPDATE LocationData SET filename = :filename WHERE item_key= :itemKey")
+    void updateFilename(int itemKey, String filename);
 
 
 

@@ -45,6 +45,11 @@ public class LocationRepository {
         new RemoveAsyncTask(context, snackbar, itemKey).execute();
     }
 
+    public void updateFilename(int itemKey, String filename)
+    {
+        new UpdateFilenameAsyncTask(mLocationDao, itemKey, filename).execute();
+    }
+
     public void nukeDatabaseIfNeeded(Context context) {
         boolean initWorker = UtilsSharedPref.getNukeDbChecker(context);
         if (!initWorker) {
@@ -74,6 +79,24 @@ public class LocationRepository {
         @Override
         protected Void doInBackground(LocationData... locationData) {
             mLocationDao.insertSingleRecord(locationData[0]);
+            return null;
+        }
+    }
+
+    private static class UpdateFilenameAsyncTask extends AsyncTask<Void, Void, Void> {
+        LocationDao locationDao;
+        int itemKey;
+        String filename;
+
+        public UpdateFilenameAsyncTask(LocationDao locationDao, int itemKey, String filename) {
+            this.locationDao = locationDao;
+            this.itemKey = itemKey;
+            this.filename = filename;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            locationDao.updateFilename(itemKey, filename);
             return null;
         }
     }

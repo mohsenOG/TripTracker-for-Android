@@ -41,7 +41,7 @@ public class ExportAsyncTask extends AsyncTask<Void, Void, Void> {
             exportDir.mkdir();
         }
 
-        //TODO Feature request: get the saving name from user!
+        //TODO Set the user given name as output name
         mFilename = Utils.getFormattedFileName();
         try {
             String filePath = exportDir.getAbsolutePath() + "/" + mFilename;

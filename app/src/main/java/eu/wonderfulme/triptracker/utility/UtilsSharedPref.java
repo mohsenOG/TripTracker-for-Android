@@ -16,6 +16,9 @@ import eu.wonderfulme.triptracker.database.LocationHeaderData;
 
 public class UtilsSharedPref {
 
+    public static final int DEFAULT_RECORD_PERIOD = 10;
+    public static final int DEFAULT_LAST_ITEM_KEY = -100;
+
     private UtilsSharedPref() {}
 
     private static SharedPreferences getSharedPref(Context context) {
@@ -31,12 +34,12 @@ public class UtilsSharedPref {
 
     static public int getRecordPeriodFromSharedPref(Context context) {
         SharedPreferences sharedPreferences = UtilsSharedPref.getSharedPref(context);
-        return sharedPreferences.getInt(context.getString(R.string.preference_record_period), 10);
+        return sharedPreferences.getInt(context.getString(R.string.preference_record_period), DEFAULT_RECORD_PERIOD);
     }
 
     static public int getLastItemKeyFromSharedPref(Context context) {
         SharedPreferences sharedPreferences = UtilsSharedPref.getSharedPref(context);
-        return sharedPreferences.getInt(context.getString(R.string.preference_item_key), -100);
+        return sharedPreferences.getInt(context.getString(R.string.preference_item_key), DEFAULT_LAST_ITEM_KEY);
     }
 
     static public void setItemKeyToSharedPref(Context context, int lastItemKey) {
@@ -74,7 +77,7 @@ public class UtilsSharedPref {
     static public void setWidgetRouteList(Context context, List<LocationHeaderData> routes) {
         List<String> routesList = new ArrayList<>();
         for (LocationHeaderData headerData : routes) {
-            routesList.add(headerData.getMinTimestamp());
+            routesList.add(headerData.getFilename());
         }
         Set<String> targetSet = new HashSet<>(routesList);
         SharedPreferences sharedPreferences = UtilsSharedPref.getSharedPref(context);
