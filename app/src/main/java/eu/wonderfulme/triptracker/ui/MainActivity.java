@@ -355,11 +355,6 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
                 mapIntent = new Intent(Intent.ACTION_VIEW, mapUri);
                 startActivity(mapIntent);
             }
-            // Remove location from shared pref.
-            UtilsSharedPref.setParkingLocationToSharedPref(this, null);
-            // Set button to parking save parking again.
-            mSaveParkingButton.setText(R.string.btn_save_parking);
-            mRemoveParkingButton.setEnabled(false);
         }
     }
 
