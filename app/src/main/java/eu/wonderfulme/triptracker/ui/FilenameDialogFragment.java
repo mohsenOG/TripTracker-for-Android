@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -49,6 +50,8 @@ public class FilenameDialogFragment extends DialogFragment {
         }
 
         final EditText input = new EditText(getActivity());
+        input.setMaxLines(1);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
         String defaultFilename = Utils.getFormattedTime(System.currentTimeMillis());
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         input.setLayoutParams(lp);

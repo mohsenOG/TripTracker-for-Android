@@ -2,11 +2,11 @@
     <string name="app_name">Trip Tracker</string>
 
     <!-- Admob -->
-    <string name="admob_app_id" translatable="false">ca-app-pub-3940256099942544~3347511713</string>
-    <string name="admob_banner_main_activity" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="admob_banner_detail_activity" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="admob_interstitial_option_menu" translatable="false">ca-app-pub-3940256099942544/1033173712</string>
-    <string name="admob_interstitial_detail_export" translatable="false">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="admob_app_id" translatable="false">ca-app-pub-6372048201484020~2846253835</string>
+    <string name="admob_banner_main_activity" translatable="false">ca-app-pub-6372048201484020/4051524299</string>
+    <string name="admob_banner_detail_activity" translatable="false">ca-app-pub-6372048201484020/1430790888</string>
+    <string name="admob_interstitial_option_menu" translatable="false">ca-app-pub-6372048201484020/4218087391</string>
+    <string name="admob_interstitial_detail_export" translatable="false">ca-app-pub-6372048201484020/4270058285</string>
 
     <!-- Location DB table headers -->
     <string name="table_header_timestamp" translatable="false">timestamp</string>
@@ -82,7 +82,7 @@
     <string name="action_privacy">Privacy Policy</string>
 
     <!-- About page strings -->
-    <string name="about_my_app" translatable="false">Trip Tracker v1.1</string>
+    <string name="about_my_app" translatable="false">Trip Tracker v1.2</string>
     <string name="about_trademark" translatable="false">\u00A9 2018 Mohsen Oghbaei - WonderfulMe.eu</string>
     <string name="about_found_bug" translatable="false">Found a bug? let us know:</string>
     <string name="about_found_bug_email" translatable="false">info@wonderfulme.eu</string>
