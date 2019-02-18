@@ -4,11 +4,11 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.os.AsyncTask;
 
-import eu.wonderfulme.triptracker.database.LocationRepository;
-import eu.wonderfulme.triptracker.utility.GoogleApiHelper;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.ads.MobileAds;
 
+import eu.wonderfulme.triptracker.database.LocationRepository;
+import eu.wonderfulme.triptracker.utility.GoogleApiHelper;
 import eu.wonderfulme.triptracker.utility.UtilsSharedPref;
 import io.fabric.sdk.android.Fabric;
 

@@ -77,7 +77,7 @@ public class UtilsSharedPref {
     static public void setWidgetRouteList(Context context, List<LocationHeaderData> routes) {
         List<String> routesList = new ArrayList<>();
         for (LocationHeaderData headerData : routes) {
-            routesList.add(headerData.getFilename());
+            routesList.add(headerData.getRouteName());
         }
         Set<String> targetSet = new HashSet<>(routesList);
         SharedPreferences sharedPreferences = UtilsSharedPref.getSharedPref(context);

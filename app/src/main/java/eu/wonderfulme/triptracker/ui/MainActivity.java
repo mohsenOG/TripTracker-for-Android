@@ -2,10 +2,6 @@ package eu.wonderfulme.triptracker.ui;
 
 import android.Manifest;
 import android.appwidget.AppWidgetManager;
-
-import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -15,18 +11,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -40,12 +25,25 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.common.util.CollectionUtils;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import eu.wonderfulme.triptracker.App;
@@ -116,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
 
         // Init recyclerView.
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new RoutesRecyclerViewAdapter(this, new ArrayList<LocationHeaderData>());
+        mAdapter = new RoutesRecyclerViewAdapter(this, new ArrayList<>());
         mAdapter.setItemClickListener(this);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -446,7 +444,7 @@ public class MainActivity extends AppCompatActivity implements RoutesRecyclerVie
     public void onItemClick(LocationHeaderData headerData) {
         Intent routeItemIntent = new Intent(this, DetailActivity.class);
         routeItemIntent.putExtra(INTENT_EXTRA_ITEM_KEY, headerData.getItem_key());
-        routeItemIntent.putExtra(INTENT_EXTRA_ROUTE_NAME, headerData.getFilename());
+        routeItemIntent.putExtra(INTENT_EXTRA_ROUTE_NAME, headerData.getRouteName());
         startActivity(routeItemIntent);
     }
 

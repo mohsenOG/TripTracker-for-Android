@@ -1,12 +1,12 @@
 package eu.wonderfulme.triptracker.ui;
 
 import android.os.Bundle;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import eu.wonderfulme.triptracker.R;
 import eu.wonderfulme.triptracker.utility.UtilsSharedPref;
 

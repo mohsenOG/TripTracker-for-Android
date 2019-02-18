@@ -43,7 +43,7 @@
     <string name="toast_gps_denied">Our app main functionality needs location. Please turn your gps on and try again.</string>
     <string name="toast_google_client_no_connection">Our app main functionality needs Google Services. Please login to you google account.</string>
     <string name="snackBar_put_app_in_background">Now you can put app in background!</string>
-    <string name="snackBar_export_csv_successful">Saved!</string>
+    <string name="snackBar_export_csv_successful">Successfully Saved</string>
     <string name="snackBar_export_csv_failed">Export failed. Please try again.</string>
     <string name="snackBar_goto_downloads">Downloads</string>
     <string name="snackBar_remove_succeed">Route has been removed successfully.</string>

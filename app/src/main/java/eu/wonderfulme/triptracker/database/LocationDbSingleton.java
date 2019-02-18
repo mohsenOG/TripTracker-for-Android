@@ -1,7 +1,8 @@
 package eu.wonderfulme.triptracker.database;
 
-import androidx.room.Room;
 import android.content.Context;
+
+import androidx.room.Room;
 
 class LocationDbSingleton {
 

@@ -6,12 +6,12 @@ import org.apache.commons.lang3.StringUtils;
 public class LocationHeaderData {
     private final int item_key;
     private final String minTimestamp;
-    private final String filename;
+    private final String routeName;
 
-    public LocationHeaderData(int item_key, String minTimestamp, String filename) {
+    public LocationHeaderData(int item_key, String minTimestamp, String routeName) {
         this.item_key = item_key;
         this.minTimestamp = minTimestamp;
-        this.filename = filename;
+        this.routeName = routeName;
     }
 
     public int getItem_key() {
@@ -20,11 +20,11 @@ public class LocationHeaderData {
 
     public String getMinTimestamp() { return minTimestamp; }
 
-    public String getFilename() {
-        if (StringUtils.isEmpty(filename)) {
+    public String getRouteName() {
+        if (StringUtils.isEmpty(routeName)) {
             return minTimestamp;
         } else {
-            return filename;
+            return routeName;
         }
     }
 }

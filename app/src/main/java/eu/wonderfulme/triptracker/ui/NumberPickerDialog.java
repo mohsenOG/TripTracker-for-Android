@@ -3,11 +3,11 @@ package eu.wonderfulme.triptracker.ui;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
 import android.view.View;
 import android.widget.Button;
 import android.widget.NumberPicker;
 
+import androidx.annotation.NonNull;
 import eu.wonderfulme.triptracker.R;
 import eu.wonderfulme.triptracker.utility.UtilsSharedPref;
 

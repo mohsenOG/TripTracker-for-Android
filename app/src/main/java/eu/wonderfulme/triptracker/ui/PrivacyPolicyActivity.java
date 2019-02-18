@@ -1,9 +1,5 @@
 package eu.wonderfulme.triptracker.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
-import eu.wonderfulme.triptracker.R;
-import eu.wonderfulme.triptracker.utility.Utils;
-
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -12,6 +8,10 @@ import android.widget.TextView;
 
 import java.io.IOException;
 import java.io.InputStream;
+
+import androidx.appcompat.app.AppCompatActivity;
+import eu.wonderfulme.triptracker.R;
+import eu.wonderfulme.triptracker.utility.Utils;
 
 public class PrivacyPolicyActivity extends AppCompatActivity {
 

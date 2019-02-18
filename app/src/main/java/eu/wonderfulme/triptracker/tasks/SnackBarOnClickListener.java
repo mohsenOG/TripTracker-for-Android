@@ -3,8 +3,9 @@ package eu.wonderfulme.triptracker.tasks;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
-import com.google.android.material.snackbar.Snackbar;
 import android.view.View;
+
+import com.google.android.material.snackbar.Snackbar;
 
 class SnackBarOnClickListener implements View.OnClickListener {
 

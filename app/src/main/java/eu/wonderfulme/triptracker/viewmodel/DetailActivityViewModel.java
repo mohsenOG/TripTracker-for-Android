@@ -10,8 +10,6 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
 import eu.wonderfulme.triptracker.database.LocationData;
 import eu.wonderfulme.triptracker.database.LocationRepository;
 
@@ -31,9 +29,7 @@ public class DetailActivityViewModel extends AndroidViewModel {
 
     public int getItemKey() {return mItemKey;}
 
-    public LiveData<List<LocationData>> getLocationData() {
-        return mLocationData;
-    }
+    public LiveData<List<LocationData>> getLocationData() { return mLocationData; }
 
     public void deleteSingleItemKey(Context context, Snackbar snackbar) {
         mLocationRepository.deleteSingleItemKey(context, snackbar, mItemKey);

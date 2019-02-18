@@ -1,15 +1,15 @@
 package eu.wonderfulme.triptracker.ui;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import eu.wonderfulme.triptracker.App;
-import eu.wonderfulme.triptracker.utility.GoogleApiHelper;
 import eu.wonderfulme.triptracker.R;
+import eu.wonderfulme.triptracker.utility.GoogleApiHelper;
 
 public class LauncherActivity extends AppCompatActivity {
 

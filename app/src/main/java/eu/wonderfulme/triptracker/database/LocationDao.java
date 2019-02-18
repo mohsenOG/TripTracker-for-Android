@@ -1,11 +1,11 @@
 package eu.wonderfulme.triptracker.database;
 
+import java.util.List;
+
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
-
-import java.util.List;
 
 @Dao
 public interface LocationDao {
@@ -13,7 +13,7 @@ public interface LocationDao {
     @Insert
     void insertSingleRecord(LocationData data);
 
-    @Query("SELECT item_key, MIN(timestamp) as minTimestamp, filename FROM LocationData GROUP BY item_key")
+    @Query("SELECT item_key, MIN(timestamp) as minTimestamp, route_name as routeName FROM LocationData GROUP BY item_key")
     LiveData<List<LocationHeaderData>> getAllLocationHeaderData();
 
     @Query("SELECT * FROM LocationData WHERE item_key = :itemKey")
@@ -28,8 +28,8 @@ public interface LocationDao {
     @Query("DELETE FROM LocationData WHERE item_key = :itemKey")
     void deleteSingleItemKey(int itemKey);
 
-    @Query("UPDATE LocationData SET filename = :filename WHERE item_key= :itemKey")
-    void updateFilename(int itemKey, String filename);
+    @Query("UPDATE LocationData SET route_name = :routeName WHERE item_key= :itemKey")
+    void updateRouteName(int itemKey, String routeName);
 
 
 

@@ -2,10 +2,8 @@ package eu.wonderfulme.triptracker.database;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
-import androidx.lifecycle.LiveData;
 import android.content.Context;
 import android.os.AsyncTask;
-import androidx.annotation.NonNull;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -13,6 +11,8 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.Worker;
@@ -45,9 +45,9 @@ public class LocationRepository {
         new RemoveAsyncTask(context, snackbar, itemKey).execute();
     }
 
-    public void updateFilename(int itemKey, String filename)
+    public void updateRouteName(int itemKey, String filename)
     {
-        new UpdateFilenameAsyncTask(mLocationDao, itemKey, filename).execute();
+        new UpdateRouteNameAsyncTask(mLocationDao, itemKey, filename).execute();
     }
 
     public void nukeDatabaseIfNeeded(Context context) {
@@ -83,20 +83,20 @@ public class LocationRepository {
         }
     }
 
-    private static class UpdateFilenameAsyncTask extends AsyncTask<Void, Void, Void> {
+    private static class UpdateRouteNameAsyncTask extends AsyncTask<Void, Void, Void> {
         LocationDao locationDao;
         int itemKey;
-        String filename;
+        String routeName;
 
-        public UpdateFilenameAsyncTask(LocationDao locationDao, int itemKey, String filename) {
+        public UpdateRouteNameAsyncTask(LocationDao locationDao, int itemKey, String routeName) {
             this.locationDao = locationDao;
             this.itemKey = itemKey;
-            this.filename = filename;
+            this.routeName = routeName;
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
-            locationDao.updateFilename(itemKey, filename);
+            locationDao.updateRouteName(itemKey, routeName);
             return null;
         }
     }

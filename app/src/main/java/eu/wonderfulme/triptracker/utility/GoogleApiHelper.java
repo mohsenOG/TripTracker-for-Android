@@ -2,12 +2,13 @@ package eu.wonderfulme.triptracker.utility;
 
 import android.content.Context;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * https://stackoverflow.com/a/33400346/6072457

@@ -5,9 +5,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -69,8 +66,8 @@ public class FilenameDialogFragment extends DialogFragment {
         builder.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                String filename = input.getText().toString();
-                locationRepository.updateFilename(itemKey, filename);
+                String routeName = input.getText().toString();
+                locationRepository.updateRouteName(itemKey, routeName);
                 dialogInterface.dismiss();
             }
         });
@@ -79,8 +76,8 @@ public class FilenameDialogFragment extends DialogFragment {
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                String filename = input.getText().toString();
-                locationRepository.updateFilename(itemKey, filename);
+                String routeName = input.getText().toString();
+                locationRepository.updateRouteName(itemKey, routeName);
                 dialogInterface.dismiss();
             }
         });
