@@ -14,6 +14,10 @@ public class AboutActivity extends AppCompatActivity {
 
     @BindView(R.id.tv_about_openCSV_website) TextView mOpenCsvWebsiteTextView;
     @BindView(R.id.tv_about_openCSV_license) TextView mOpenCsvLicenseTextView;
+
+    @BindView(R.id.tv_about_flaticon_website) TextView mFlaticonWebsiteTextView;
+    @BindView(R.id.tv_about_flaticon_license) TextView mFlaticonLicenseTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,5 +30,8 @@ public class AboutActivity extends AppCompatActivity {
         }
         mOpenCsvWebsiteTextView.setMovementMethod(LinkMovementMethod.getInstance());
         mOpenCsvLicenseTextView.setMovementMethod(LinkMovementMethod.getInstance());
+
+        mFlaticonWebsiteTextView.setMovementMethod(LinkMovementMethod.getInstance());
+        mFlaticonLicenseTextView.setMovementMethod(LinkMovementMethod.getInstance());
     }
 }

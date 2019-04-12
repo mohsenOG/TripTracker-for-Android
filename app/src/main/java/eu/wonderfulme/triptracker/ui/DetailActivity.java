@@ -16,6 +16,7 @@ import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
@@ -26,6 +27,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import butterknife.BindView;
@@ -44,7 +46,6 @@ import static eu.wonderfulme.triptracker.ui.MainActivity.INTENT_EXTRA_ROUTE_NAME
 
 public class DetailActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapLoadedCallback {
 
-    private static final String SAVE_STATE_LOCATION_DATA_KEY = "SAVE_STATE_LOCATION_DATA_KEY";
     private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 103;
 
     @BindView(R.id.btn_detail_export) protected Button mExportButton;
@@ -178,6 +179,11 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         List<LocationData> locationData = detailActivityViewModel.getLocationData().getValue();
         if (mMap != null &&  locationData != null && !locationData.isEmpty()) {
             mMap.addPolyline(Utils.getPolyLine(locationData));
+            // Adding Start/End marker on map
+            BitmapDescriptor markerA = Utils.getMarkerIconFromDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.marker_letter_a, null));
+            BitmapDescriptor markerB = Utils.getMarkerIconFromDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.marker_letter_b, null));
+            mMap.addMarker(Utils.getMarker(locationData.get(0), getString(R.string.marker_start), markerA));
+            mMap.addMarker(Utils.getMarker(locationData.get(locationData.size() - 1), getString(R.string.marker_end), markerB));
         }
     }
 
